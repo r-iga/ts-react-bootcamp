@@ -47,7 +47,7 @@
 **実装例:**
 ```tsx
 // ❌ 混在した実装
-function UserProfile({ userId }: { userId: string }) {
+const UserProfile = ({ userId }: { userId: string }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -70,11 +70,11 @@ function UserProfile({ userId }: { userId: string }) {
       <p>{user.email}</p>
     </div>
   );
-}
+};
 
 // ✅ Container/Presentation に分離
 // Container: データ取得とロジック
-function UserProfileContainer({ userId }: { userId: string }) {
+const UserProfileContainer = ({ userId }: { userId: string }) => {
   const { data: user, loading, error } = useFetch<User>(`/api/users/${userId}`);
   
   if (loading) return <LoadingSpinner />;
@@ -82,14 +82,14 @@ function UserProfileContainer({ userId }: { userId: string }) {
   if (!user) return <NotFound message="User not found" />;
   
   return <UserProfilePresentation user={user} />;
-}
+};
 
 // Presentation: 表示のみ
 type UserProfilePresentationProps = {
   user: User;
 };
 
-function UserProfilePresentation({ user }: UserProfilePresentationProps) {
+const UserProfilePresentation = ({ user }: UserProfilePresentationProps) => {
   return (
     <div className="profile">
       <img src={user.avatar} alt={user.name} />
@@ -97,7 +97,7 @@ function UserProfilePresentation({ user }: UserProfilePresentationProps) {
       <p>{user.email}</p>
     </div>
   );
-}
+};
 ```
 
 **カスタムフックとの組み合わせ:**
@@ -110,7 +110,7 @@ function useUserProfile(userId: string) {
 }
 
 // Container がシンプルに
-function UserProfileContainer({ userId }: { userId: string }) {
+const UserProfileContainer = ({ userId }: { userId: string }) => {
   const { user, loading, error } = useUserProfile(userId);
   
   if (loading) return <LoadingSpinner />;
@@ -118,7 +118,7 @@ function UserProfileContainer({ userId }: { userId: string }) {
   if (!user) return <NotFound message="User not found" />;
   
   return <UserProfilePresentation user={user} />;
-}
+};
 ```
 
 ### 8.3 コンポーネント設計のベストプラクティス
@@ -137,7 +137,7 @@ function UserProfileContainer({ userId }: { userId: string }) {
 **条件付きレンダリングの整理:**
 ```tsx
 // ❌ 複雑な条件をコンポーネント内に
-function Component() {
+const Component = () => {
   return (
     <div>
       {loading ? (
@@ -151,30 +151,30 @@ function Component() {
       )}
     </div>
   );
-}
+};
 
 // ✅ Early Return でシンプルに
-function Component() {
+const Component = () => {
   if (loading) return <Spinner />;
   if (error) return <Error />;
   if (!data) return <Empty />;
   
   return <Content data={data} />;
-}
+};
 ```
 
 **コンポーネントの合成:**
 ```tsx
 // Composition Pattern
-function Card({ children }: { children: React.ReactNode }) {
+const Card = ({ children }: { children: React.ReactNode }) => {
   return <div className="card">{children}</div>;
-}
+};
 
-Card.Header = function CardHeader({ children }: { children: React.ReactNode }) {
+Card.Header = ({ children }: { children: React.ReactNode }) => {
   return <div className="card-header">{children}</div>;
 };
 
-Card.Body = function CardBody({ children }: { children: React.ReactNode }) {
+Card.Body = ({ children }: { children: React.ReactNode }) => {
   return <div className="card-body">{children}</div>;
 };
 

@@ -17,7 +17,7 @@
 
 ```tsx
 // ❌ 1つのコンポーネントに多くの責務
-function UserDashboard() {
+const UserDashboard = () => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
@@ -69,14 +69,14 @@ function UserDashboard() {
       </div>
     </div>
   );
-}
+};
 ```
 
 ### 良い例：責務を分離
 
 ```tsx
 // ✅ 各コンポーネントは1つの責務
-function UserProfile({ user }: { user: User }) {
+const UserProfile = ({ user }: { user: User }) => {
   return (
     <div>
       <img src={user.avatar} alt={user.name} />
@@ -84,9 +84,9 @@ function UserProfile({ user }: { user: User }) {
       <p>{user.bio}</p>
     </div>
   );
-}
+};
 
-function PostList({ posts }: { posts: Post[] }) {
+const PostList = ({ posts }: { posts: Post[] }) => {
   return (
     <div>
       <h2>Posts</h2>
@@ -95,18 +95,18 @@ function PostList({ posts }: { posts: Post[] }) {
       ))}
     </div>
   );
-}
+};
 
-function PostItem({ post }: { post: Post }) {
+const PostItem = ({ post }: { post: Post }) => {
   return (
     <article>
       <h3>{post.title}</h3>
       <p>{post.content}</p>
     </article>
   );
-}
+};
 
-function FollowerList({ followers }: { followers: User[] }) {
+const FollowerList = ({ followers }: { followers: User[] }) => {
   return (
     <div>
       <h2>Followers</h2>
@@ -115,19 +115,19 @@ function FollowerList({ followers }: { followers: User[] }) {
       ))}
     </div>
   );
-}
+};
 
-function FollowerItem({ follower }: { follower: User }) {
+const FollowerItem = ({ follower }: { follower: User }) => {
   return (
     <div>
       <img src={follower.avatar} alt={follower.name} />
       <span>{follower.name}</span>
     </div>
   );
-}
+};
 
 // ✅ コンテナコンポーネント（データ取得）
-function UserDashboard() {
+const UserDashboard = () => {
   const { data: user } = useFetch<User>('/api/user');
   const { data: posts } = useFetch<Post[]>('/api/posts');
   const { data: followers } = useFetch<User[]>('/api/followers');
@@ -143,7 +143,7 @@ function UserDashboard() {
       <FollowerList followers={followers} />
     </div>
   );
-}
+};
 ```
 
 ## 2. コンテナとプレゼンテーション
@@ -160,7 +160,7 @@ type ProductCardProps = {
   onAddToCart: (id: number) => void;
 };
 
-function ProductCard({ product, onAddToCart }: ProductCardProps) {
+const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
   return (
     <div className="card">
       <img src={product.image} alt={product.name} />
@@ -171,7 +171,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
       </button>
     </div>
   );
-}
+};
 ```
 
 ### コンテナコンポーネント
@@ -181,7 +181,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
 // State やカスタムフックを使う
 // プレゼンテーショナルコンポーネントにデータを渡す
 
-function ProductListContainer() {
+const ProductListContainer = () => {
   const { data: products, loading } = useFetch<Product[]>('/api/products');
   const [cart, setCart] = useState<number[]>([]);
   
@@ -204,7 +204,7 @@ function ProductListContainer() {
       ))}
     </div>
   );
-}
+};
 ```
 
 ## 3. Compound Components パターン
@@ -213,7 +213,7 @@ function ProductListContainer() {
 
 ```tsx
 // ✅ コンポーネントを組み合わせて使える
-function Tabs({ children }: { children: React.ReactNode }) {
+const Tabs = ({ children }: { children: React.ReactNode }) => {
   const [activeTab, setActiveTab] = useState(0);
   
   return (
@@ -221,13 +221,13 @@ function Tabs({ children }: { children: React.ReactNode }) {
       <div className="tabs">{children}</div>
     </TabsContext.Provider>
   );
-}
+};
 
-function TabList({ children }: { children: React.ReactNode }) {
+const TabList = ({ children }: { children: React.ReactNode }) => {
   return <div className="tab-list">{children}</div>;
-}
+};
 
-function Tab({ index, children }: { index: number; children: React.ReactNode }) {
+const Tab = ({ index, children }: { index: number; children: React.ReactNode }) => {
   const { activeTab, setActiveTab } = useTabsContext();
   
   return (
@@ -238,22 +238,22 @@ function Tab({ index, children }: { index: number; children: React.ReactNode }) 
       {children}
     </button>
   );
-}
+};
 
-function TabPanels({ children }: { children: React.ReactNode }) {
+const TabPanels = ({ children }: { children: React.ReactNode }) => {
   return <div className="tab-panels">{children}</div>;
-}
+};
 
-function TabPanel({ index, children }: { index: number; children: React.ReactNode }) {
+const TabPanel = ({ index, children }: { index: number; children: React.ReactNode }) => {
   const { activeTab } = useTabsContext();
   
   if (activeTab !== index) return null;
   
   return <div className="tab-panel">{children}</div>;
-}
+};
 
 // 使用例
-function App() {
+const App = () => {
   return (
     <Tabs>
       <TabList>
@@ -275,7 +275,7 @@ function App() {
       </TabPanels>
     </Tabs>
   );
-}
+};
 ```
 
 ## 4. コンポーネントの粒度
@@ -284,24 +284,24 @@ function App() {
 
 ```tsx
 // ⚠️ 小さすぎ：再利用されない
-function UserNameFirstLetter({ name }: { name: string }) {
+const UserNameFirstLetter = ({ name }: { name: string }) => {
   return <span>{name[0]}</span>;
-}
+};
 
 // ✅ 適切：意味のある単位
-function UserAvatar({ user }: { user: User }) {
+const UserAvatar = ({ user }: { user: User }) => {
   return (
     <div className="avatar">
       <img src={user.avatar} alt={user.name} />
       <span>{user.name}</span>
     </div>
   );
-}
+};
 
 // ⚠️ 大きすぎ：複数の責務
-function UserDashboardWithEverything() {
+const UserDashboardWithEverything = () => {
   // プロフィール、投稿、フォロワー、設定...
-}
+};
 ```
 
 ### 分割の目安
@@ -320,24 +320,24 @@ function UserDashboardWithEverything() {
 
 ```tsx
 // ❌ オブジェクト全体を渡す
-function UserCard({ user }: { user: User }) {
+const UserCard = ({ user }: { user: User }) => {
   return <div>{user.name}</div>; // name しか使わない
-}
+};
 
 // ✅ 必要なものだけ
-function UserCard({ name }: { name: string }) {
+const UserCard = ({ name }: { name: string }) => {
   return <div>{name}</div>;
-}
+};
 
 // Or: 複数の情報が必要な場合はオブジェクトで
-function UserCard({ user }: { user: Pick<User, 'name' | 'avatar'> }) {
+const UserCard = ({ user }: { user: Pick<User, 'name' | 'avatar'> }) => {
   return (
     <div>
       <img src={user.avatar} alt={user.name} />
       <span>{user.name}</span>
     </div>
   );
-}
+};
 ```
 
 ### boolean Props
@@ -465,7 +465,7 @@ import { UserCard, UserList } from '@/components';
 
 ```tsx
 // ❌ 同じコードを繰り返す
-function Profile() {
+const Profile = () => {
   return (
     <div>
       <div className="card">
@@ -474,9 +474,9 @@ function Profile() {
       </div>
     </div>
   );
-}
+};
 
-function Settings() {
+const Settings = () => {
   return (
     <div>
       <div className="card">
@@ -485,64 +485,64 @@ function Settings() {
       </div>
     </div>
   );
-}
+};
 
 // ✅ コンポーネントを再利用
-function UserHeader({ user }: { user: User }) {
+const UserHeader = ({ user }: { user: User }) => {
   return (
     <div className="card">
       <img src={user.avatar} alt={user.name} />
       <h3>{user.name}</h3>
     </div>
   );
-}
+};
 
-function Profile() {
+const Profile = () => {
   return <UserHeader user={user} />;
-}
+};
 
-function Settings() {
+const Settings = () => {
   return <UserHeader user={user} />;
-}
+};
 ```
 
 ### 2. Props Drilling を避ける
 
 ```tsx
 // ❌ Props を深くバケツリレー
-function App() {
+const App = () => {
   const user = useUser();
   return <Layout user={user} />;
-}
+};
 
-function Layout({ user }) {
+const Layout = ({ user }) => {
   return <Sidebar user={user} />;
-}
+};
 
-function Sidebar({ user }) {
+const Sidebar = ({ user }) => {
   return <UserMenu user={user} />;
-}
+};
 
-function UserMenu({ user }) {
+const UserMenu = ({ user }) => {
   return <div>{user.name}</div>;
-}
+};
 
 // ✅ Context を使う（後述）
 const UserContext = createContext();
 
-function App() {
+const App = () => {
   const user = useUser();
   return (
     <UserContext.Provider value={user}>
       <Layout />
     </UserContext.Provider>
   );
-}
+};
 
-function UserMenu() {
+const UserMenu = () => {
   const user = useContext(UserContext);
   return <div>{user.name}</div>;
-}
+};
 ```
 
 ## 📝 練習問題
@@ -552,7 +552,7 @@ function UserMenu() {
 次の巨大なコンポーネントを適切に分割してください。
 
 ```tsx
-function ProductPage() {
+const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [cart, setCart] = useState([]);
@@ -566,7 +566,7 @@ function ProductPage() {
       {/* カート */}
     </div>
   );
-}
+};
 ```
 
 <details>
@@ -574,7 +574,7 @@ function ProductPage() {
 
 ```tsx
 // コンテナ
-function ProductPage() {
+const ProductPage = () => {
   const { data: product } = useProduct();
   const { data: reviews } = useReviews();
   const { cart, addToCart } = useCart();
@@ -588,10 +588,10 @@ function ProductPage() {
       <CartSummary items={cart} />
     </div>
   );
-}
+};
 
 // プレゼンテーション
-function ProductInfo({ product, onAddToCart }) {
+const ProductInfo = ({ product, onAddToCart }) => {
   return (
     <div>
       <h1>{product.name}</h1>
@@ -601,9 +601,9 @@ function ProductInfo({ product, onAddToCart }) {
       </button>
     </div>
   );
-}
+};
 
-function ReviewList({ reviews }) {
+const ReviewList = ({ reviews }) => {
   return (
     <div>
       {reviews.map(review => (
@@ -611,18 +611,18 @@ function ReviewList({ reviews }) {
       ))}
     </div>
   );
-}
+};
 
-function ReviewItem({ review }) {
+const ReviewItem = ({ review }) => {
   return (
     <div>
       <p>{review.comment}</p>
       <span>{review.rating}</span>
     </div>
   );
-}
+};
 
-function CartSummary({ items }) {
+const CartSummary = ({ items }) => {
   const total = items.reduce((sum, item) => sum + item.price, 0);
   
   return (
@@ -631,7 +631,7 @@ function CartSummary({ items }) {
       <p>Total: ¥{total}</p>
     </div>
   );
-}
+};
 ```
 </details>
 

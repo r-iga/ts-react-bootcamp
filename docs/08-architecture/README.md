@@ -103,11 +103,11 @@ const UserProfilePresentation = ({ user }: UserProfilePresentationProps) => {
 **カスタムフックとの組み合わせ:**
 ```tsx
 // ロジックをカスタムフックに抽出
-function useUserProfile(userId: string) {
+const useUserProfile = (userId: string) => {
   const { data, loading, error } = useFetch<User>(`/api/users/${userId}`);
   
   return { user: data, loading, error };
-}
+};
 
 // Container がシンプルに
 const UserProfileContainer = ({ userId }: { userId: string }) => {

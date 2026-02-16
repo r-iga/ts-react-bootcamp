@@ -342,7 +342,7 @@ type AppContextType = {
 const StateContext = createContext<State | null>(null);
 const DispatchContext = createContext<Dispatch | null>(null);
 
-function Provider({ children }) {
+const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   
   return (
@@ -352,13 +352,13 @@ function Provider({ children }) {
       </DispatchContext.Provider>
     </StateContext.Provider>
   );
-}
+};
 ```
 
 ### 解決策3：useMemo で値をメモ化
 
 ```tsx
-function ThemeProvider({ children }: { children: React.ReactNode }) {
+const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   
   // ✅ 値をメモ化

@@ -54,7 +54,7 @@ type User = {
   email: string;
 };
 
-function UserProfile({ userId }: { userId: number }) {
+const UserProfile = ({ userId }: { userId: number }) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['user', userId],
     queryFn: async () => {
@@ -76,7 +76,7 @@ function UserProfile({ userId }: { userId: number }) {
       <p>{data.email}</p>
     </div>
   );
-}
+};
 ```
 
 ### queryKey の重要性
@@ -104,7 +104,7 @@ useQuery({
 ### enabled - 条件付き実行
 
 ```tsx
-function UserPosts({ userId }: { userId: number | null }) {
+const UserPosts = ({ userId }: { userId: number | null }) => {
   const { data: posts } = useQuery({
     queryKey: ['posts', userId],
     queryFn: () => fetchPosts(userId!),
@@ -112,7 +112,7 @@ function UserPosts({ userId }: { userId: number | null }) {
   });
   
   return <div>{/* ... */}</div>;
-}
+};
 ```
 
 ### staleTime - データの新鮮度
@@ -147,7 +147,7 @@ type CreateUserData = {
   email: string;
 };
 
-function CreateUserForm() {
+const CreateUserForm = () => {
   const queryClient = useQueryClient();
   
   const mutation = useMutation({
@@ -181,13 +181,13 @@ function CreateUserForm() {
       {mutation.isSuccess && <p>User created!</p>}
     </form>
   );
-}
+};
 ```
 
 ### Optimistic Updates - 楽観的更新
 
 ```tsx
-function TodoItem({ todo }: { todo: Todo }) {
+const TodoItem = ({ todo }: { todo: Todo }) => {
   const queryClient = useQueryClient();
   
   const mutation = useMutation({
@@ -222,7 +222,7 @@ function TodoItem({ todo }: { todo: Todo }) {
       <button onClick={() => mutation.mutate(todo.id)}>Delete</button>
     </div>
   );
-}
+};
 ```
 
 ## 6. キャッシュの操作
@@ -278,13 +278,13 @@ export function useUser(userId: number) {
 }
 
 // コンポーネントで使用
-function UserProfile({ userId }: { userId: number }) {
+const UserProfile = ({ userId }: { userId: number }) => {
   const { data: user, isLoading } = useUser(userId);
   
   if (isLoading) return <div>Loading...</div>;
   
   return <div>{user?.name}</div>;
-}
+};
 ```
 
 ### useTodos フック
@@ -333,7 +333,7 @@ export function useDeleteTodo() {
 }
 
 // 使用
-function TodoList() {
+const TodoList = () => {
   const { data: todos, isLoading } = useTodos();
   const createTodo = useCreateTodo();
   const deleteTodo = useDeleteTodo();
@@ -350,7 +350,7 @@ function TodoList() {
       ))}
     </div>
   );
-}
+};
 ```
 
 ## 8. ページネーション
@@ -358,7 +358,7 @@ function TodoList() {
 ### useQuery でページネーション
 
 ```tsx
-function UserList() {
+const UserList = () => {
   const [page, setPage] = useState(1);
   
   const { data, isLoading } = useQuery({
@@ -390,13 +390,13 @@ function UserList() {
       </button>
     </div>
   );
-}
+};
 ```
 
 ### useInfiniteQuery - 無限スクロール
 
 ```tsx
-function InfiniteUserList() {
+const InfiniteUserList = () => {
   const {
     data,
     fetchNextPage,
@@ -425,7 +425,7 @@ function InfiniteUserList() {
       )}
     </div>
   );
-}
+};
 ```
 
 ## 9. DevTools
@@ -435,14 +435,14 @@ function InfiniteUserList() {
 ```tsx
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-function App() {
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <YourApp />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -502,7 +502,7 @@ const queryClient = new QueryClient({
 <parameter name="summary">解答例</summary>
 
 ```tsx
-function ProductList() {
+const ProductList = () => {
   const { data: products, isLoading } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
@@ -536,7 +536,7 @@ function ProductList() {
       ))}
     </ul>
   );
-}
+};
 ```
 </details>
 

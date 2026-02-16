@@ -33,7 +33,7 @@
 ```tsx
 import { useState } from 'react';
 
-function useCounter(initialValue: number = 0) {
+const useCounter = (initialValue: number = 0) => {
   const [count, setCount] = useState(initialValue);
   
   const increment = () => setCount(prev => prev + 1);
@@ -41,10 +41,10 @@ function useCounter(initialValue: number = 0) {
   const reset = () => setCount(initialValue);
   
   return { count, increment, decrement, reset };
-}
+};
 
 // 使用例
-function Counter() {
+const Counter = () => {
   const { count, increment, decrement, reset } = useCounter(0);
   
   return (
@@ -55,12 +55,12 @@ function Counter() {
       <button onClick={reset}>Reset</button>
     </>
   );
-}
+};
 ```
 
 **トグル機能:**
 ```tsx
-function useToggle(initialValue: boolean = false) {
+const useToggle = (initialValue: boolean = false) => {
   const [value, setValue] = useState(initialValue);
   
   const toggle = () => setValue(prev => !prev);
@@ -68,12 +68,12 @@ function useToggle(initialValue: boolean = false) {
   const setFalse = () => setValue(false);
   
   return { value, toggle, setTrue, setFalse };
-}
+};
 ```
 
 **配列の操作:**
 ```tsx
-function useArray<T>(initialArray: T[] = []) {
+const useArray = <T,>(initialArray: T[] = []) => {
   const [array, setArray] = useState(initialArray);
   
   const push = (item: T) => setArray(prev => [...prev, item]);
@@ -82,14 +82,14 @@ function useArray<T>(initialArray: T[] = []) {
   const clear = () => setArray([]);
   
   return { array, push, remove, clear };
-}
+};
 ```
 
 ### 7.3 副作用を含むカスタムフック
 
 **useLocalStorage:**
 ```tsx
-function useLocalStorage<T>(key: string, initialValue: T) {
+const useLocalStorage = <T,>(key: string, initialValue: T) => {
   // 初期値の取得
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
@@ -114,10 +114,10 @@ function useLocalStorage<T>(key: string, initialValue: T) {
   };
   
   return [storedValue, setValue] as const;
-}
+};
 
 // 使用例
-function App() {
+const App = () => {
   const [theme, setTheme] = useLocalStorage('theme', 'light');
   
   return (
@@ -125,12 +125,12 @@ function App() {
       Toggle Theme (current: {theme})
     </button>
   );
-}
+};
 ```
 
 **useWindowSize:**
 ```tsx
-function useWindowSize() {
+const useWindowSize = () => {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -149,12 +149,12 @@ function useWindowSize() {
   }, []);
   
   return windowSize;
-}
+};
 ```
 
 **useDebounce:**
 ```tsx
-function useDebounce<T>(value: T, delay: number): T {
+const useDebounce = <T,>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   
   useEffect(() => {
@@ -168,10 +168,10 @@ function useDebounce<T>(value: T, delay: number): T {
   }, [value, delay]);
   
   return debouncedValue;
-}
+};
 
 // 使用例: 検索入力のデバウンス
-function SearchInput() {
+const SearchInput = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   
@@ -188,7 +188,7 @@ function SearchInput() {
       onChange={(e) => setSearchTerm(e.target.value)}
     />
   );
-}
+};
 ```
 
 ### 7.4 データフェッチング
@@ -201,7 +201,7 @@ type FetchState<T> = {
   error: Error | null;
 };
 
-function useFetch<T>(url: string) {
+const useFetch = <T,>(url: string) => {
   const [state, setState] = useState<FetchState<T>>({
     data: null,
     loading: true,
@@ -241,10 +241,10 @@ function useFetch<T>(url: string) {
   }, [url]);
   
   return state;
-}
+};
 
 // 使用例
-function UserProfile({ userId }: { userId: string }) {
+const UserProfile = ({ userId }: { userId: string }) => {
   const { data, loading, error } = useFetch<User>(
     `https://api.example.com/users/${userId}`
   );
@@ -254,15 +254,15 @@ function UserProfile({ userId }: { userId: string }) {
   if (!data) return null;
   
   return <div>{data.name}</div>;
-}
+};
 ```
 
 **useAsync:**
 ```tsx
-function useAsync<T>(
+const useAsync = <T,>(
   asyncFunction: () => Promise<T>,
   immediate: boolean = true
-) {
+) => {
   const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
   const [value, setValue] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -290,14 +290,14 @@ function useAsync<T>(
   }, [execute, immediate]);
   
   return { execute, status, value, error };
-}
+};
 ```
 
 ### 7.5 フォーム管理
 
 **useForm:**
 ```tsx
-function useForm<T extends Record<string, any>>(initialValues: T) {
+const useForm = <T extends Record<string, any>>(initialValues: T) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   
@@ -327,10 +327,10 @@ function useForm<T extends Record<string, any>>(initialValues: T) {
     setFieldError,
     reset,
   };
-}
+};
 
 // 使用例
-function LoginForm() {
+const LoginForm = () => {
   const { values, errors, handleChange, setFieldError, reset } = useForm({
     email: '',
     password: '',
@@ -369,17 +369,17 @@ function LoginForm() {
       <button type="button" onClick={reset}>Reset</button>
     </form>
   );
-}
+};
 ```
 
 ### 7.6 DOM 操作
 
 **useClickOutside:**
 ```tsx
-function useClickOutside(
+const useClickOutside = (
   ref: React.RefObject<HTMLElement>,
   handler: () => void
-) {
+) => {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
       if (!ref.current || ref.current.contains(event.target as Node)) {
@@ -396,10 +396,10 @@ function useClickOutside(
       document.removeEventListener('touchstart', listener);
     };
   }, [ref, handler]);
-}
+};
 
 // 使用例: ドロップダウンメニュー
-function Dropdown() {
+const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
@@ -411,16 +411,16 @@ function Dropdown() {
       {isOpen && <div>Dropdown content</div>}
     </div>
   );
-}
+};
 ```
 
 **useEventListener:**
 ```tsx
-function useEventListener<K extends keyof WindowEventMap>(
+const useEventListener = <K extends keyof WindowEventMap>(
   eventName: K,
   handler: (event: WindowEventMap[K]) => void,
   element: Window | HTMLElement = window
-) {
+) => {
   const savedHandler = useRef(handler);
   
   useEffect(() => {
@@ -437,7 +437,7 @@ function useEventListener<K extends keyof WindowEventMap>(
       element.removeEventListener(eventName, eventListener);
     };
   }, [eventName, element]);
-}
+};
 ```
 
 ### 7.7 カスタムフックの設計パターン
@@ -445,36 +445,36 @@ function useEventListener<K extends keyof WindowEventMap>(
 **返り値のパターン:**
 ```tsx
 // 配列で返す（useState スタイル）
-function useToggle(initial: boolean) {
+const useToggle = (initial: boolean) => {
   const [value, setValue] = useState(initial);
   const toggle = () => setValue(v => !v);
   return [value, toggle] as const;
-}
+};
 
 // オブジェクトで返す
-function useCounter(initial: number) {
+const useCounter = (initial: number) => {
   const [count, setCount] = useState(initial);
   const increment = () => setCount(c => c + 1);
   return { count, increment };
-}
+};
 ```
 
 **引数のパターン:**
 ```tsx
 // 単一の引数
-function useFetch(url: string) { /* ... */ }
+const useFetch = (url: string) => { /* ... */ };
 
 // オプションオブジェクト
-function useFetch(options: {
+const useFetch = (options: {
   url: string;
   method?: string;
   headers?: Record<string, string>;
-}) { /* ... */ }
+}) => { /* ... */ };
 ```
 
 **フックの組み合わせ:**
 ```tsx
-function useUserData(userId: string) {
+const useUserData = (userId: string) => {
   const { data, loading, error } = useFetch(`/users/${userId}`);
   const [user, setUser] = useLocalStorage('user', null);
   
@@ -485,7 +485,7 @@ function useUserData(userId: string) {
   }, [data, setUser]);
   
   return { user, loading, error };
-}
+};
 ```
 
 **TypeScript のベストプラクティス:**

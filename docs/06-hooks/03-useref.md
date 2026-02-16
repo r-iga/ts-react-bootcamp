@@ -18,7 +18,7 @@ DOM要素への参照取得や、レンダリング間で値を保持する用�
 ```tsx
 import { useRef } from 'react';
 
-function Component() {
+const Component = () => {
   const ref = useRef(initialValue);
   
   // ref.current で値にアクセス
@@ -26,13 +26,13 @@ function Component() {
   
   // 値を変更（再レンダリングされない）
   ref.current = newValue;
-}
+};
 ```
 
 ### useState との違い
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   const countRef = useRef(0);
   
@@ -47,7 +47,7 @@ function Component() {
   };
   
   return <button onClick={handleClick}>Click</button>;
-}
+};
 ```
 
 ## 2. DOM 要素への参照
@@ -55,7 +55,7 @@ function Component() {
 ### input 要素にフォーカス
 
 ```tsx
-function AutoFocusInput() {
+const AutoFocusInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
@@ -64,13 +64,13 @@ function AutoFocusInput() {
   }, []);
   
   return <input ref={inputRef} type="text" />;
-}
+};
 ```
 
 ### ボタンクリックでフォーカス
 
 ```tsx
-function FocusInput() {
+const FocusInput = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   
   const handleClick = () => {
@@ -83,13 +83,13 @@ function FocusInput() {
       <button onClick={handleClick}>Focus Input</button>
     </div>
   );
-}
+};
 ```
 
 ### スクロール位置の取得・設定
 
 ```tsx
-function ScrollToTop() {
+const ScrollToTop = () => {
   const divRef = useRef<HTMLDivElement>(null);
   
   const scrollToTop = () => {
@@ -107,7 +107,7 @@ function ScrollToTop() {
       <button onClick={scrollToTop}>Scroll to Top</button>
     </div>
   );
-}
+};
 ```
 
 ## 3. Canvas や Video の操作
@@ -115,7 +115,7 @@ function ScrollToTop() {
 ### Canvas
 
 ```tsx
-function Canvas() {
+const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   useEffect(() => {
@@ -131,13 +131,13 @@ function Canvas() {
   }, []);
   
   return <canvas ref={canvasRef} width={200} height={200} />;
-}
+};
 ```
 
 ### Video の再生・一時停止
 
 ```tsx
-function VideoPlayer() {
+const VideoPlayer = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   const play = () => {
@@ -155,7 +155,7 @@ function VideoPlayer() {
       <button onClick={pause}>Pause</button>
     </div>
   );
-}
+};
 ```
 
 ## 4. レンダリング間で値を保持
@@ -163,7 +163,7 @@ function VideoPlayer() {
 ### タイマーIDの保持
 
 ```tsx
-function Timer() {
+const Timer = () => {
   const [count, setCount] = useState(0);
   const intervalIdRef = useRef<number | null>(null);
   
@@ -198,13 +198,13 @@ function Timer() {
       <button onClick={stop}>Stop</button>
     </div>
   );
-}
+};
 ```
 
 ### 前回の値を保持
 
 ```tsx
-function UsePrevious<T>(value: T) {
+const usePrevious = <T,>(value: T) => {
   const ref = useRef<T>();
   
   useEffect(() => {
@@ -212,9 +212,9 @@ function UsePrevious<T>(value: T) {
   }, [value]);
   
   return ref.current;
-}
+};
 
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(0);
   const prevCount = usePrevious(count);
   
@@ -225,7 +225,7 @@ function Counter() {
       <button onClick={() => setCount(count + 1)}>+1</button>
     </div>
   );
-}
+};
 ```
 
 ## 5. 更新カウントの追跡
@@ -233,7 +233,7 @@ function Counter() {
 ### デバッグ用
 
 ```tsx
-function Component({ prop }: { prop: string }) {
+const Component = ({ prop }: { prop: string }) => {
   const renderCount = useRef(0);
   
   useEffect(() => {
@@ -246,7 +246,7 @@ function Component({ prop }: { prop: string }) {
       <p>Rendered {renderCount.current} times</p>
     </div>
   );
-}
+};
 ```
 
 ## 6. useRef と useState の使い分け
@@ -285,13 +285,13 @@ type InputProps = {
 };
 
 const CustomInput = forwardRef<HTMLInputElement, InputProps>(
-  function CustomInput({ placeholder }, ref) {
+  ({ placeholder }, ref) => {
     return <input ref={ref} placeholder={placeholder} />;
   }
 );
 
 // 使用
-function Parent() {
+const Parent = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   
   const handleClick = () => {
@@ -304,7 +304,7 @@ function Parent() {
       <button onClick={handleClick}>Focus</button>
     </div>
   );
-}
+};
 ```
 
 ### カスタムボタン
@@ -315,7 +315,7 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  function Button({ variant = 'primary', children, ...props }, ref) {
+  ({ variant = 'primary', children, ...props }, ref) => {
     return (
       <button ref={ref} className={`btn btn-${variant}`} {...props}>
         {children}
@@ -325,7 +325,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 // 使用
-function App() {
+const App = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   
   useEffect(() => {
@@ -333,7 +333,7 @@ function App() {
   }, []);
   
   return <Button ref={buttonRef}>Click me</Button>;
-}
+};
 ```
 
 ## 8. useImperativeHandle
@@ -349,7 +349,7 @@ type InputHandle = {
 };
 
 const CustomInput = forwardRef<InputHandle, {}>(
-  function CustomInput(_props, ref) {
+  (_props, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
     
     useImperativeHandle(ref, () => ({
@@ -368,7 +368,7 @@ const CustomInput = forwardRef<InputHandle, {}>(
 );
 
 // 使用
-function Parent() {
+const Parent = () => {
   const inputRef = useRef<InputHandle>(null);
   
   return (
@@ -378,7 +378,7 @@ function Parent() {
       <button onClick={() => inputRef.current?.clear()}>Clear</button>
     </div>
   );
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -411,13 +411,13 @@ if (inputRef.current) {
 
 ```tsx
 // ❌ ref を通常の Props で渡す
-function Child({ inputRef }: { inputRef: RefObject<HTMLInputElement> }) {
+const Child = ({ inputRef }: { inputRef: RefObject<HTMLInputElement> }) => {
   return <input ref={inputRef} />;
-}
+};
 
 // ✅ forwardRef を使う
 const Child = forwardRef<HTMLInputElement, {}>(
-  function Child(_props, ref) {
+  (_props, ref) => {
     return <input ref={ref} />;
   }
 );
@@ -434,7 +434,7 @@ const Child = forwardRef<HTMLInputElement, {}>(
 <summary>解答</summary>
 
 ```tsx
-function ClickCounter () {
+const ClickCounter = () => {
   const countRef = useRef(0);
   const [, forceUpdate] = useState({});
   
@@ -449,7 +449,7 @@ function ClickCounter () {
       <button onClick={handleClick}>Click me</button>
     </div>
   );
-}
+};
 ```
 </details>
 

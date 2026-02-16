@@ -42,7 +42,7 @@ import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -50,7 +50,7 @@ function App() {
       <Route path="/contact" element={<ContactPage />} />
     </Routes>
   );
-}
+};
 ```
 
 ## 3. ナビゲーション
@@ -60,7 +60,7 @@ function App() {
 ```tsx
 import { Link } from 'react-router-dom';
 
-function Navigation() {
+const Navigation = () => {
   return (
     <nav>
       <Link to="/">Home</Link>
@@ -68,7 +68,7 @@ function Navigation() {
       <Link to="/contact">Contact</Link>
     </nav>
   );
-}
+};
 ```
 
 ### NavLink - アクティブ状態
@@ -76,7 +76,7 @@ function Navigation() {
 ```tsx
 import { NavLink } from 'react-router-dom';
 
-function Navigation() {
+const Navigation = () => {
   return (
     <nav>
       <NavLink
@@ -95,7 +95,7 @@ function Navigation() {
       </NavLink>
     </nav>
   );
-}
+};
 ```
 
 ## 4. 動的ルート
@@ -105,7 +105,7 @@ function Navigation() {
 ```tsx
 import { Routes, Route } from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/users/:userId" element={<UserProfile />} />
@@ -113,7 +113,7 @@ function App() {
       <Route path="/products/:productId/reviews/:reviewId" element={<ReviewDetail />} />
     </Routes>
   );
-}
+};
 ```
 
 ### useParams でパラメータを取得
@@ -121,13 +121,13 @@ function App() {
 ```tsx
 import { useParams } from 'react-router-dom';
 
-function UserProfile() {
+const UserProfile = () => {
   const { userId } = useParams<{ userId: string }>();
   
   return <div>User ID: {userId}</div>;
-}
+};
 
-function PostDetail() {
+const PostDetail = () => {
   const { postId } = useParams<{ postId: string }>();
   const { data: post } = useFetch<Post>(`/api/posts/${postId}`);
   
@@ -139,7 +139,7 @@ function PostDetail() {
       <p>{post.content}</p>
     </article>
   );
-}
+};
 ```
 
 ## 5. ネストしたルート
@@ -149,7 +149,7 @@ function PostDetail() {
 ```tsx
 import { Outlet } from 'react-router-dom';
 
-function Layout() {
+const Layout = () => {
   return (
     <div>
       <header>
@@ -165,13 +165,13 @@ function Layout() {
       </footer>
     </div>
   );
-}
+};
 ```
 
 ### ネストしたルート定義
 
 ```tsx
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -187,7 +187,7 @@ function App() {
       </Route>
     </Routes>
   );
-}
+};
 ```
 
 ## 6. プログラムによるナビゲーション
@@ -197,7 +197,7 @@ function App() {
 ```tsx
 import { useNavigate } from 'react-router-dom';
 
-function LoginForm() {
+const LoginForm = () => {
   const navigate = useNavigate();
   
   const handleSubmit = async (e: React.FormEvent) => {
@@ -217,13 +217,13 @@ function LoginForm() {
       <button type="submit">Login</button>
     </form>
   );
-}
+};
 ```
 
 ### 履歴操作
 
 ```tsx
-function Component() {
+const Component = () => {
   const navigate = useNavigate();
   
   // 前のページに戻る
@@ -246,7 +246,7 @@ function Component() {
       <button onClick={goForward}>Forward</button>
     </div>
   );
-}
+};
 ```
 
 ## 7. クエリパラメータ
@@ -256,7 +256,7 @@ function Component() {
 ```tsx
 import { useSearchParams } from 'react-router-dom';
 
-function ProductList() {
+const ProductList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
   const category = searchParams.get('category');
@@ -281,7 +281,7 @@ function ProductList() {
       </button>
     </div>
   );
-}
+};
 
 // URL: /products?category=electronics&sort=price&page=1
 ```
@@ -291,7 +291,7 @@ function ProductList() {
 ### Not Found ルート
 
 ```tsx
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -301,16 +301,16 @@ function App() {
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
-}
+};
 
-function NotFoundPage() {
+const NotFoundPage = () => {
   return (
     <div>
       <h1>404 - Page Not Found</h1>
       <Link to="/">Go to Home</Link>
     </div>
   );
-}
+};
 ```
 
 ## 9. Protected Routes
@@ -320,7 +320,7 @@ function NotFoundPage() {
 ```tsx
 import { Navigate } from 'react-router-dom';
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   
   if (!isAuthenticated) {
@@ -329,10 +329,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
   
   return <>{children}</>;
-}
+};
 
 // 使用
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -356,7 +356,7 @@ function App() {
       />
     </Routes>
   );
-}
+};
 ```
 
 ## 10. ローディング状態
@@ -372,7 +372,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 
-function App() {
+const App = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>
@@ -382,7 +382,7 @@ function App() {
       </Routes>
     </Suspense>
   );
-}
+};
 ```
 
 ## 11. useLocation
@@ -392,7 +392,7 @@ function App() {
 ```tsx
 import { useLocation } from 'react-router-dom';
 
-function Component() {
+const Component = () => {
   const location = useLocation();
   
   console.log(location.pathname); // "/users/123"
@@ -401,13 +401,13 @@ function Component() {
   console.log(location.state);    // Navigate で渡された state
   
   return <div>Current path: {location.pathname}</div>;
-}
+};
 ```
 
 ### 前のページの情報を取得
 
 ```tsx
-function LoginPage() {
+const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -420,7 +420,7 @@ function LoginPage() {
   };
   
   return <button onClick={handleLogin}>Login</button>;
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -449,7 +449,7 @@ export const routes = [
 // App.tsx
 import { routes } from './routes';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       {routes.map(route => (
@@ -457,7 +457,7 @@ function App() {
       ))}
     </Routes>
   );
-}
+};
 ```
 
 ### 3. TypeScript で型安全に
@@ -483,17 +483,17 @@ navigate('/users/123');
 
 ```tsx
 // App.tsx
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/users" element={<UserList />} />
       <Route path="/users/:userId" element={<UserDetail />} />
     </Routes>
   );
-}
+};
 
 // UserList.tsx
-function UserList() {
+const UserList = () => {
   const users = [
     { id: 1, name: "Alice" },
     { id: 2, name: "Bob" },
@@ -512,10 +512,10 @@ function UserList() {
       </ul>
     </div>
   );
-}
+};
 
 // UserDetail.tsx
-function UserDetail() {
+const UserDetail = () => {
   const { userId } = useParams<{ userId: string }>();
   
   return (
@@ -525,7 +525,7 @@ function UserDetail() {
       <Link to="/users">Back to list</Link>
     </div>
   );
-}
+};
 ```
 </details>
 

@@ -73,9 +73,9 @@ const element = <h1>Hello, {name}!</h1>;
 
 **関数コンポーネント:**
 ```tsx
-function Welcome(props: { name: string }) {
+const Welcome = (props: { name: string }) => {
   return <h1>Hello, {props.name}!</h1>;
-}
+};
 ```
 
 **コンポーネントの命名規則:**
@@ -105,30 +105,30 @@ function Welcome(props: { name: string }) {
 
 **Props の受け取り方:**
 ```tsx
-function Welcome(props: { name: string; age: number }) {
+const Welcome = (props: { name: string; age: number }) => {
   return <p>{props.name} is {props.age} years old</p>;
-}
+};
 ```
 
 **Props の分割代入:**
 ```tsx
-function Welcome({ name, age }: { name: string; age: number }) {
+const Welcome = ({ name, age }: { name: string; age: number }) => {
   return <p>{name} is {age} years old</p>;
-}
+};
 ```
 
 **デフォルト値:**
 ```tsx
-function Greeting({ name = 'Guest' }: { name?: string }) {
+const Greeting = ({ name = 'Guest' }: { name?: string }) => {
   return <h1>Hello, {name}!</h1>;
-}
+};
 ```
 
 **children プロパティ:**
 ```tsx
-function Card({ children }: { children: React.ReactNode }) {
+const Card = ({ children }: { children: React.ReactNode }) => {
   return <div className="card">{children}</div>;
-}
+};
 
 // 使用例
 <Card>

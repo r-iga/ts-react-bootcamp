@@ -30,7 +30,7 @@ State/Props変更
 ### 再レンダリングのトリガー
 
 ```tsx
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(0);
   
   console.log("Rendered"); // State変更ごとに実行される
@@ -41,7 +41,7 @@ function Counter() {
       <button onClick={() => setCount(count + 1)}>+1</button>
     </div>
   );
-}
+};
 ```
 
 ## 2. 再レンダリングが起きるとき
@@ -49,25 +49,25 @@ function Counter() {
 ### 1. State が変更されたとき
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   
   // ✅ State変更で再レンダリング
   const increment = () => setCount(count + 1);
   
   return <button onClick={increment}>Count: {count}</button>;
-}
+};
 ```
 
 ### 2. Props が変更されたとき
 
 ```tsx
-function Child({ name }: { name: string }) {
+const Child = ({ name }: { name: string }) => {
   console.log("Child rendered");
   return <p>Hello, {name}!</p>;
-}
+};
 
-function Parent() {
+const Parent = () => {
   const [name, setName] = useState("Alice");
   
   // Parent が再レンダリング → Child も再レンダリング
@@ -77,18 +77,18 @@ function Parent() {
       <button onClick={() => setName("Bob")}>Change</button>
     </div>
   );
-}
+};
 ```
 
 ### 3. 親コンポーネントが再レンダリングされたとき
 
 ```tsx
-function Child() {
+const Child = () => {
   console.log("Child rendered");
   return <p>I am child</p>;
-}
+};
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   // Parent が再レンダリング → Child も再レンダリング（Propsが変わらなくても）
@@ -98,7 +98,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ## 3. 同じ値で State を更新したとき
@@ -106,7 +106,7 @@ function Parent() {
 ### 再レンダリングされない
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   
   const handleClick = () => {
@@ -114,13 +114,13 @@ function Component() {
   };
   
   return <button onClick={handleClick}>Count: {count}</button>;
-}
+};
 ```
 
 ### オブジェクトの場合（参照の比較）
 
 ```tsx
-function Component() {
+const Component = () => {
   const [user, setUser] = useState({ name: "Alice" });
   
   const handleClick = () => {
@@ -129,7 +129,7 @@ function Component() {
   };
   
   return <button onClick={handleClick}>{user.name}</button>;
-}
+};
 ```
 
 ## 4. React.memo で最適化
@@ -140,18 +140,18 @@ function Component() {
 import { memo } from 'react';
 
 // ⚠️ memo なし：親の再レンダリングで常に再レンダリング
-function Child({ name }: { name: string }) {
+const Child = ({ name }: { name: string }) => {
   console.log("Child rendered");
   return <p>Hello, {name}!</p>;
-}
+};
 
 // ✅ memo あり：Props が変わらなければ再レンダリングしない
-const MemoizedChild = memo(function Child({ name }: { name: string }) {
+const MemoizedChild = memo(({ name }: { name: string }) => {
   console.log("Child rendered");
   return <p>Hello, {name}!</p>;
 });
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   return (
@@ -160,20 +160,20 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ### memo が役立つとき
 
 ```tsx
 // ✅ 重い計算をするコンポーネント
-const ExpensiveComponent = memo(function ExpensiveComponent({ data }) {
+const ExpensiveComponent = memo(({ data }) => {
   const result = heavyCalculation(data);
   return <div>{result}</div>;
 });
 
 // ✅ 頻繁に再レンダリングされる親を持つ子
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   return (
@@ -182,7 +182,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ## 5. Props に関数やオブジェクトを渡すときの注意
@@ -192,12 +192,12 @@ function Parent() {
 ```tsx
 import { memo } from 'react';
 
-const Child = memo(function Child({ onClick }: { onClick: () => void }) {
+const Child = memo(({ onClick }: { onClick: () => void }) => {
   console.log("Child rendered");
   return <button onClick={onClick}>Click</button>;
 });
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   // ❌ 毎回新しい関数が作られる → memo が効かない
@@ -207,7 +207,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ### 解決策：useCallback（後述）
@@ -215,12 +215,12 @@ function Parent() {
 ```tsx
 import { memo, useCallback } from 'react';
 
-const Child = memo(function Child({ onClick }: { onClick: () => void }) {
+const Child = memo(({ onClick }: { onClick: () => void }) => {
   console.log("Child rendered");
   return <button onClick={onClick}>Click</button>;
 });
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   // ✅ 同じ関数参照を返す
@@ -234,7 +234,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ## 6. key によるリセット
@@ -242,7 +242,7 @@ function Parent() {
 ### key が変わるとコンポーネントを再作成
 
 ```tsx
-function Form({ userId }: { userId: number }) {
+const Form = ({ userId }: { userId: number }) => {
   const [name, setName] = useState("");
   
   // userId が変わっても name は残る
@@ -252,9 +252,9 @@ function Form({ userId }: { userId: number }) {
       onChange={(e) => setName(e.target.value)}
     />
   );
-}
+};
 
-function Parent() {
+const Parent = () => {
   const [userId, setUserId] = useState(1);
   
   // ✅ key を指定すると userId 変更時にフォームがリセットされる
@@ -264,7 +264,7 @@ function Parent() {
       <button onClick={() => setUserId(userId + 1)}>Next User</button>
     </div>
   );
-}
+};
 ```
 
 ## 7. 仮想DOMと実際のDOM
@@ -287,7 +287,7 @@ function Parent() {
 ### 差分検出（Reconciliation）
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   
   // count が変わると：
@@ -300,7 +300,7 @@ function Component() {
       <p>Count: {count}</p>    {/* 変更あり：<p>のテキストだけ更新 */}
     </div>
   );
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -309,14 +309,14 @@ function Component() {
 
 ```tsx
 // ❌ すべてを memo でラップする必要はない
-const Component = memo(function Component() {
+const Component = memo(() => {
   return <div>Simple component</div>;
 });
 
 // ✅ パフォーマンス問題が出てから最適化
-function Component() {
+const Component = () => {
   return <div>Simple component</div>;
-}
+};
 ```
 
 ### 2. 安定した key を使う
@@ -333,7 +333,7 @@ function Component() {
 
 ```tsx
 // ❌ グローバルな State で全体が再レンダリング
-function App() {
+const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
   return (
@@ -344,10 +344,10 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
 // ✅ 必要な場所だけに State を持つ
-function App() {
+const App = () => {
   return (
     <div>
       <Header />
@@ -355,7 +355,7 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 ```
 
 ## 📝 練習問題
@@ -365,12 +365,12 @@ function App() {
 次のコードで「Increment」ボタンをクリックしたとき、何回「Child rendered」がログ出力されるでしょうか？
 
 ```tsx
-function Child() {
+const Child = () => {
   console.log("Child rendered");
   return <p>I am child</p>;
-}
+};
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   return (
@@ -379,7 +379,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Increment</button>
     </div>
   );
-}
+};
 ```
 
 <details>

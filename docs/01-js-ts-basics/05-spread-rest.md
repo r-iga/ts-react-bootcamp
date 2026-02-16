@@ -356,7 +356,7 @@ type ButtonProps = {
 };
 
 // 親コンポーネント
-function Container(props: ButtonProps) {
+const Container = (props: ButtonProps) => {
   const { label, ...restProps } = props;
   
   // label 以外の Props を子に渡す
@@ -366,7 +366,7 @@ function Container(props: ButtonProps) {
       <Button {...restProps} />
     </div>
   );
-}
+};
 ```
 
 ## 5. TypeScript での型付け

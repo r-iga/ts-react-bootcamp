@@ -29,7 +29,7 @@ export const ThemeContext = createContext<ThemeContextType | null>(null);
 ### Provider でデータを提供
 
 ```tsx
-function App() {
+const App = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   
   const toggleTheme = () => {
@@ -41,7 +41,7 @@ function App() {
       <Layout />
     </ThemeContext.Provider>
   );
-}
+};
 ```
 
 ### useContext でデータを取得
@@ -49,7 +49,7 @@ function App() {
 ```tsx
 import { useContext } from 'react';
 
-function ThemeToggleButton() {
+const ThemeToggleButton = () => {
   const context = useContext(ThemeContext);
   
   if (!context) {
@@ -63,7 +63,7 @@ function ThemeToggleButton() {
       Current theme: {theme}
     </button>
   );
-}
+};
 ```
 
 ## 2. カスタムフックでラップ
@@ -107,11 +107,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 // 使用側
-function Component() {
+const Component = () => {
   const { theme, toggleTheme } = useTheme(); // ✅ シンプル
   
   return <button onClick={toggleTheme}>{theme}</button>;
-}
+};
 ```
 
 ## 3. 認証 Context の実装
@@ -203,7 +203,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 ```tsx
 // App.tsx
-function App() {
+const App = () => {
   return (
     <AuthProvider>
       <Router>
@@ -221,10 +221,10 @@ function App() {
       </Router>
     </AuthProvider>
   );
-}
+};
 
 // LoginPage.tsx
-function LoginPage() {
+const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   
@@ -235,10 +235,10 @@ function LoginPage() {
   };
   
   return <form onSubmit={handleSubmit}>{/* ... */}</form>;
-}
+};
 
 // DashboardPage.tsx
-function DashboardPage() {
+const DashboardPage = () => {
   const { user, logout } = useAuth();
   
   return (
@@ -247,10 +247,10 @@ function DashboardPage() {
       <button onClick={logout}>Logout</button>
     </div>
   );
-}
+};
 
 // ProtectedRoute.tsx
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) return <div>Loading...</div>;
@@ -260,7 +260,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
   
   return <>{children}</>;
-}
+};
 ```
 
 ## 4. 複数の Context を組み合わせる
@@ -268,7 +268,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 ### Provider のネスト
 
 ```tsx
-function App() {
+const App = () => {
   return (
     <AuthProvider>
       <ThemeProvider>
@@ -280,14 +280,14 @@ function App() {
       </ThemeProvider>
     </AuthProvider>
   );
-}
+};
 ```
 
 ### 複合 Provider
 
 ```tsx
 // AppProviders.tsx
-export function AppProviders({ children }: { children: React.ReactNode }) {
+export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthProvider>
       <ThemeProvider>
@@ -297,10 +297,10 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       </ThemeProvider>
     </AuthProvider>
   );
-}
+};
 
 // App.tsx
-function App() {
+const App = () => {
   return (
     <AppProviders>
       <Router>
@@ -308,7 +308,7 @@ function App() {
       </Router>
     </AppProviders>
   );
-}
+};
 ```
 
 ## 5. パフォーマンスの最適化
@@ -342,7 +342,7 @@ type AppContextType = {
 const StateContext = createContext<State | null>(null);
 const DispatchContext = createContext<Dispatch | null>(null);
 
-function Provider({ children }) {
+const Provider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   
   return (
@@ -352,13 +352,13 @@ function Provider({ children }) {
       </DispatchContext.Provider>
     </StateContext.Provider>
   );
-}
+};
 ```
 
 ### 解決策3：useMemo で値をメモ化
 
 ```tsx
-function ThemeProvider({ children }: { children: React.ReactNode }) {
+const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   
   // ✅ 値をメモ化
@@ -456,7 +456,7 @@ export function useTodoDispatch() {
 }
 
 // 使用例
-function TodoList() {
+const TodoList = () => {
   const { todos } = useTodoState();
   const dispatch = useTodoDispatch();
   
@@ -477,9 +477,9 @@ function TodoList() {
       ))}
     </ul>
   );
-}
+};
 
-function TodoForm() {
+const TodoForm = () => {
   const dispatch = useTodoDispatch();
   const [text, setText] = useState('');
   
@@ -495,7 +495,8 @@ function TodoForm() {
       <button type="submit">Add</button>
     </form>
   );
-}
+};
+```
 ```
 
 ## ✅ ベストプラクティス

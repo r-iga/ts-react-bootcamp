@@ -16,22 +16,22 @@ Reactコンポーネントは、UIを構築するための再利用可能な部�
 ### 基本形
 
 ```tsx
-function Welcome() {
+const Welcome = () => {
   return <h1>Hello, World!</h1>;
-}
+};
 ```
 
 ### TypeScriptでの型付け
 
 ```tsx
-function Welcome(): JSX.Element {
+const Welcome = (): JSX.Element => {
   return <h1>Hello, World!</h1>;
-}
+};
 
 // または型推論に任せる（推奨）
-function Welcome() {
+const Welcome = () => {
   return <h1>Hello, World!</h1>;
-}
+};
 ```
 
 ### アロー関数
@@ -54,9 +54,9 @@ type GreetingProps = {
   name: string;
 };
 
-function Greeting({ name }: GreetingProps) {
+const Greeting = ({ name }: GreetingProps) => {
   return <h1>Hello, {name}!</h1>;
-}
+};
 
 // 使用
 <Greeting name="Alice" />
@@ -71,7 +71,7 @@ type UserCardProps = {
   email: string;
 };
 
-function UserCard({ name, age, email }: UserCardProps) {
+const UserCard = ({ name, age, email }: UserCardProps) => {
   return (
     <div>
       <h2>{name}</h2>
@@ -79,7 +79,7 @@ function UserCard({ name, age, email }: UserCardProps) {
       <p>Email: {email}</p>
     </div>
   );
-}
+};
 
 // 使用
 <UserCard name="Alice" age={25} email="alice@example.com" />
@@ -93,13 +93,13 @@ type ButtonProps = {
   variant?: "primary" | "secondary"; // オプショナル
 };
 
-function Button({ text, variant = "primary" }: ButtonProps) {
+const Button = ({ text, variant = "primary" }: ButtonProps) => {
   return (
     <button className={`btn btn-${variant}`}>
       {text}
     </button>
   );
-}
+};
 
 // 使用
 <Button text="Click me" />
@@ -115,18 +115,18 @@ type CardProps = {
   variant?: "default" | "outlined";
 };
 
-function Card({ 
+const Card = ({ 
   title, 
   description = "No description",
   variant = "default"
-}: CardProps) {
+}: CardProps) => {
   return (
     <div className={`card card-${variant}`}>
       <h3>{title}</h3>
       <p>{description}</p>
     </div>
   );
-}
+};
 ```
 
 ## 3. children Props
@@ -141,7 +141,7 @@ type CardProps = {
   children: React.ReactNode;
 };
 
-function Card({ title, children }: CardProps) {
+const Card = ({ title, children }: CardProps) => {
   return (
     <div className="card">
       <h3>{title}</h3>
@@ -150,7 +150,7 @@ function Card({ title, children }: CardProps) {
       </div>
     </div>
   );
-}
+};
 
 // 使用
 <Card title="My Card">
@@ -183,15 +183,15 @@ const array: React.ReactNode = [<div key="1">A</div>, <div key="2">B</div>];
 ### 小さなコンポーネントを組み合わせる
 
 ```tsx
-function Avatar({ src, alt }: { src: string; alt: string }) {
+const Avatar = ({ src, alt }: { src: string; alt: string }) => {
   return <img src={src} alt={alt} className="avatar" />;
-}
+};
 
-function UserName({ name }: { name: string }) {
+const UserName = ({ name }: { name: string }) => {
   return <h3>{name}</h3>;
-}
+};
 
-function UserCard({ user }: { user: User }) {
+const UserCard = ({ user }: { user: User }) => {
   return (
     <div className="user-card">
       <Avatar src={user.avatar} alt={user.name} />
@@ -199,7 +199,7 @@ function UserCard({ user }: { user: User }) {
       <p>{user.email}</p>
     </div>
   );
-}
+};
 ```
 
 ## 5. Props のスプレッド
@@ -211,13 +211,13 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary";
 };
 
-function Button({ variant = "primary", children, ...rest }: ButtonProps) {
+const Button = ({ variant = "primary", children, ...rest }: ButtonProps) => {
   return (
     <button className={`btn btn-${variant}`} {...rest}>
       {children}
     </button>
   );
-}
+};
 
 // onClick, disabled などのHTML属性がすべて使える
 <Button onClick={handleClick} disabled={isLoading}>
@@ -231,13 +231,13 @@ function Button({ variant = "primary", children, ...rest }: ButtonProps) {
 
 ```tsx
 // ✅ 推奨
-function UserCard() {}
-function TodoList() {}
-function MyComponent() {}
+const UserCard = () => {};
+const TodoList = () => {};
+const MyComponent = () => {};
 
 // ❌ NG
-function userCard() {}
-function todolist() {}
+const userCard = () => {};
+const todolist = () => {};
 ```
 
 ### ファイル名
@@ -259,7 +259,7 @@ todo-list.tsx
 
 ```tsx
 // ❌ 詰め込みすぎ
-function UserDashboard() {
+const UserDashboard = () => {
   return (
     <div>
       {/* プロフィール */}
@@ -270,22 +270,22 @@ function UserDashboard() {
       <div>...</div>
     </div>
   );
-}
+};
 
 // ✅ 責務を分離
-function UserProfile({ user }: { user: User }) {
+const UserProfile = ({ user }: { user: User }) => {
   return <div>...</div>;
-}
+};
 
-function UserStats({ stats }: { stats: Stats }) {
+const UserStats = ({ stats }: { stats: Stats }) => {
   return <div>...</div>;
-}
+};
 
-function RecentActivity({ activities }: { activities: Activity[] }) {
+const RecentActivity = ({ activities }: { activities: Activity[] }) => {
   return <div>...</div>;
-}
+};
 
-function UserDashboard({ user, stats, activities }) {
+const UserDashboard = ({ user, stats, activities }) => {
   return (
     <div>
       <UserProfile user={user} />
@@ -293,7 +293,7 @@ function UserDashboard({ user, stats, activities }) {
       <RecentActivity activities={activities} />
     </div>
   );
-}
+};
 ```
 
 ## 8. Propsの型定義パターン
@@ -306,17 +306,17 @@ type Props = {
   count: number;
 };
 
-function Component({ title, count }: Props) {
+const Component = ({ title, count }: Props) => {
   return <div>{title}: {count}</div>;
-}
+};
 ```
 
 ### インライン型定義
 
 ```tsx
-function Component({ title, count }: { title: string; count: number }) {
+const Component = ({ title, count }: { title: string; count: number }) => {
   return <div>{title}: {count}</div>;
-}
+};
 
 // シンプルなコンポーネントならOK
 // 複雑なら型エイリアスを使う
@@ -330,7 +330,7 @@ type ListProps<T> = {
   renderItem: (item: T) => React.ReactNode;
 };
 
-function List<T>({ items, renderItem }: ListProps<T>) {
+const List = <T,>({ items, renderItem }: ListProps<T>) => {
   return (
     <ul>
       {items.map((item, index) => (
@@ -338,7 +338,7 @@ function List<T>({ items, renderItem }: ListProps<T>) {
       ))}
     </ul>
   );
-}
+};
 
 // 使用
 <List 
@@ -358,24 +358,24 @@ type Props = {
   age: number;
 };
 
-function Component({ name, age }: Props) {}
+const Component = ({ name, age }: Props) => {};
 
 // ❌ 型なし
-function Component({ name, age }) {}
+const Component = ({ name, age }) => {};
 ```
 
 ### 2. 分割代入で受け取る
 
 ```tsx
 // ✅ 分割代入
-function Component({ name, age }: Props) {
+const Component = ({ name, age }: Props) => {
   return <div>{name}</div>;
-}
+};
 
 // ⚠️ props オブジェクトで受け取ると冗長
-function Component(props: Props) {
+const Component = (props: Props) => {
   return <div>{props.name}</div>;
-}
+};
 ```
 
 ### 3. コンポーネントは小さく保つ
@@ -424,7 +424,7 @@ type ProductCardProps = {
   product: Product;
 };
 
-function ProductCard({ product }: ProductCardProps) {
+const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div className="product-card">
       <h3>{product.name}</h3>
@@ -434,7 +434,7 @@ function ProductCard({ product }: ProductCardProps) {
       </p>
     </div>
   );
-}
+};
 ```
 </details>
 

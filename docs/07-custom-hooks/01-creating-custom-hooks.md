@@ -21,7 +21,7 @@
 
 ```tsx
 // ✅ カスタムフック
-function useCounter() {
+const useCounter = () => {
   const [count, setCount] = useState(0);
   
   const increment = () => setCount(count + 1);
@@ -29,13 +29,13 @@ function useCounter() {
   const reset = () => setCount(0);
   
   return { count, increment, decrement, reset };
-}
+};
 
 // ❌ use で始まらない
-function counter() {
+const counter = () => {
   const [count, setCount] = useState(0);
   // ...
-}
+};
 ```
 
 ## 2. シンプルなカスタムフック
@@ -43,7 +43,7 @@ function counter() {
 ### useToggle - トグル状態の管理
 
 ```tsx
-function useToggle(initialValue: boolean = false) {
+const useToggle = (initialValue: boolean = false) => {
   const [value, setValue] = useState(initialValue);
   
   const toggle = () => setValue(v => !v);
@@ -51,10 +51,10 @@ function useToggle(initialValue: boolean = false) {
   const setFalse = () => setValue(false);
   
   return { value, toggle, setTrue, setFalse };
-}
+};
 
 // 使用例
-function Component() {
+const Component = () => {
   const { value: isOpen, toggle, setFalse } = useToggle();
   
   return (
@@ -63,7 +63,7 @@ function Component() {
       <button onClick={toggle}>Toggle Modal</button>
     </div>
   );
-}
+};
 ```
 
 ### useCounter - カウンター
@@ -75,7 +75,7 @@ type UseCounterOptions = {
   step?: number;
 };
 
-function useCounter(initialValue: number = 0, options: UseCounterOptions = {}) {
+const useCounter = (initialValue: number = 0, options: UseCounterOptions = {}) => {
   const { min = -Infinity, max = Infinity, step = 1 } = options;
   const [count, setCount] = useState(initialValue);
   
@@ -96,10 +96,10 @@ function useCounter(initialValue: number = 0, options: UseCounterOptions = {}) {
   };
   
   return { count, increment, decrement, reset, set };
-}
+};
 
 // 使用例
-function Component() {
+const Component = () => {
   const { count, increment, decrement, reset } = useCounter(0, {
     min: 0,
     max: 10
@@ -113,7 +113,7 @@ function Component() {
       <button onClick={reset}>Reset</button>
     </div>
   );
-}
+};
 ```
 
 ## 3. データ取得のカスタムフック
@@ -127,7 +127,7 @@ type UseFetchResult<T> = {
   error: Error | null;
 };
 
-function useFetch<T>(url: string): UseFetchResult<T> {
+const useFetch = <T,>(url: string): UseFetchResult<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -153,7 +153,7 @@ function useFetch<T>(url: string): UseFetchResult<T> {
   }, [url]);
   
   return { data, loading, error };
-}
+};
 
 // 使用例
 type User = {
@@ -162,7 +162,7 @@ type User = {
   email: string;
 };
 
-function UserProfile({ userId }: { userId: number }) {
+const UserProfile = ({ userId }: { userId: number }) => {
   const { data: user, loading, error } = useFetch<User>(`/api/users/${userId}`);
   
   if (loading) return <div>Loading...</div>;
@@ -175,7 +175,7 @@ function UserProfile({ userId }: { userId: number }) {
       <p>{user.email}</p>
     </div>
   );
-}
+};
 ```
 
 ### useApi - より実用的
@@ -194,7 +194,7 @@ type UseApiResult<T> = {
   refetch: () => void;
 };
 
-function useApi<T>(url: string, options: UseApiOptions = {}): UseApiResult<T> {
+const useApi = <T,>(url: string, options: UseApiOptions = {}): UseApiResult<T> => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -245,7 +245,7 @@ function useApi<T>(url: string, options: UseApiOptions = {}): UseApiResult<T> {
   }, [url, options.method, options.body, refetchTrigger]);
   
   return { data, loading, error, refetch };
-}
+};
 ```
 
 ## 4. フォーム管理のカスタムフック
@@ -261,11 +261,11 @@ type UseFormReturn<T> = {
   reset: () => void;
 };
 
-function useForm<T extends Record<string, any>>(
+const useForm = <T extends Record<string, any>>(
   initialValues: T,
   onSubmit: (values: T) => void,
   validate?: (values: T) => Partial<Record<keyof T, string>>
-): UseFormReturn<T> {
+): UseFormReturn<T> => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   
@@ -295,7 +295,7 @@ function useForm<T extends Record<string, any>>(
   };
   
   return { values, errors, handleChange, handleSubmit, reset };
-}
+};
 
 // 使用例
 type LoginFormData = {
@@ -303,7 +303,7 @@ type LoginFormData = {
   password: string;
 };
 
-function LoginForm() {
+const LoginForm = () => {
   const initialValues: LoginFormData = {
     email: '',
     password: ''
@@ -362,13 +362,13 @@ function LoginForm() {
       <button type="submit">Login</button>
     </form>
   );
-}
+};
 ```
 
 ## 5. useLocalStorage - ローカルストレージ
 
 ```tsx
-function useLocalStorage<T>(key: string, initialValue: T) {
+const useLocalStorage = <T,>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
@@ -390,10 +390,10 @@ function useLocalStorage<T>(key: string, initialValue: T) {
   };
   
   return [storedValue, setValue] as const;
-}
+};
 
 // 使用例
-function ThemeToggle() {
+const ThemeToggle = () => {
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
   
   const toggle = () => {
@@ -405,13 +405,13 @@ function ThemeToggle() {
       Current theme: {theme}
     </button>
   );
-}
+};
 ```
 
 ## 6. useDebounce - デバウンス
 
 ```tsx
-function useDebounce<T>(value: T, delay: number): T {
+const useDebounce = <T,>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
   
   useEffect(() => {
@@ -425,10 +425,10 @@ function useDebounce<T>(value: T, delay: number): T {
   }, [value, delay]);
   
   return debouncedValue;
-}
+};
 
 // 使用例
-function SearchBox() {
+const SearchBox = () => {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, 500);
   
@@ -446,13 +446,13 @@ function SearchBox() {
       placeholder="Search..."
     />
   );
-}
+};
 ```
 
 ## 7. useMediaQuery - レスポンシブ
 
 ```tsx
-function useMediaQuery(query: string): boolean {
+const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(() => {
     if (typeof window !== 'undefined') {
       return window.matchMedia(query).matches;
@@ -475,10 +475,10 @@ function useMediaQuery(query: string): boolean {
   }, [query]);
   
   return matches;
-}
+};
 
 // 使用例
-function ResponsiveComponent() {
+const ResponsiveComponent = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1024px)');
   const isDesktop = useMediaQuery('(min-width: 1025px)');
@@ -490,7 +490,7 @@ function ResponsiveComponent() {
       {isDesktop && <div>Desktop View</div>}
     </div>
   );
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -499,32 +499,32 @@ function ResponsiveComponent() {
 
 ```tsx
 // ✅ カスタムフック
-function useCounter() {}
-function useForm() {}
+const useCounter = () => {};
+const useForm = () => {};
 
 // ❌ use で始まらない
-function counter() {}
-function formHelper() {}
+const counter = () => {};
+const formHelper = () => {};
 ```
 
 ### 2. 1つの責務を持つ
 
 ```tsx
 // ✅ 単一の責務
-function useCounter() {}
-function useFetch() {}
+const useCounter = () => {};
+const useFetch = () => {};
 
 // ❌ 複数の責務
-function useEverything() {
+const useEverything = () => {
   // カウンター、フォーム、データ取得...
-}
+};
 ```
 
 ### 3. TypeScript で型を明示
 
 ```tsx
 // ✅ ジェネリクスで型安全に
-function useFetch<T>(url: string): UseFetchResult<T> {}
+const useFetch = <T,>(url: string): UseFetchResult<T> => {};
 
 // ✅ 返り値の型を明示
 type UseToggleReturn = {
@@ -543,7 +543,7 @@ type UseToggleReturn = {
 <summary>解答</summary>
 
 ```tsx
-function useWindowSize() {
+const useWindowSize = () => {
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight
@@ -565,7 +565,7 @@ function useWindowSize() {
   }, []);
   
   return size;
-}
+};
 ```
 </details>
 

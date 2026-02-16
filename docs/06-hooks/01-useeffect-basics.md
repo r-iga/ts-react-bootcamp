@@ -18,20 +18,20 @@ useEffect は副作用（Side Effect）を扱うフックです。
 ```tsx
 import { useEffect } from 'react';
 
-function Component() {
+const Component = () => {
   useEffect(() => {
     // 副作用の処理
     console.log("Effect ran");
   });
   
   return <div>Component</div>;
-}
+};
 ```
 
 ### 実行タイミング
 
 ```tsx
-function Component() {
+const Component = () => {
   console.log("1. Rendering");
   
   useEffect(() => {
@@ -39,7 +39,7 @@ function Component() {
   });
   
   return <div>Component</div>;
-}
+};
 
 // 出力順序：
 // 1. Rendering
@@ -67,7 +67,7 @@ useEffect(() => {
 ### 特定の値が変わったときのみ実行
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   const [name, setName] = useState("");
   
@@ -81,7 +81,7 @@ function Component() {
       <input value={name} onChange={(e) => setName(e.target.value)} />
     </div>
   );
-}
+};
 ```
 
 ## 3. よくある使用例
@@ -89,7 +89,7 @@ function Component() {
 ### データ取得
 
 ```tsx
-function UserProfile({ userId }: { userId: number }) {
+const UserProfile = ({ userId }: { userId: number }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -108,25 +108,25 @@ function UserProfile({ userId }: { userId: number }) {
   if (!user) return <div>User not found</div>;
   
   return <div>{user.name}</div>;
-}
+};
 ```
 
 ### ドキュメントタイトルの変更
 
 ```tsx
-function PageTitle({ title }: { title: string }) {
+const PageTitle = ({ title }: { title: string }) => {
   useEffect(() => {
     document.title = title;
   }, [title]);
   
   return <h1>{title}</h1>;
-}
+};
 ```
 
 ### ローカルストレージへの保存
 
 ```tsx
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(() => {
     const saved = localStorage.getItem("count");
     return saved ? parseInt(saved) : 0;
@@ -141,7 +141,7 @@ function Counter() {
       Count: {count}
     </button>
   );
-}
+};
 ```
 
 ## 4. クリーンアップ関数
@@ -149,7 +149,7 @@ function Counter() {
 ### なぜ必要か
 
 ```tsx
-function Timer() {
+const Timer = () => {
   const [count, setCount] = useState(0);
   
   useEffect(() => {
@@ -162,13 +162,13 @@ function Timer() {
   }, []);
   
   return <div>Count: {count}</div>;
-}
+};
 ```
 
 ### クリーンアップの実装
 
 ```tsx
-function Timer() {
+const Timer = () => {
   const [count, setCount] = useState(0);
   
   useEffect(() => {
@@ -184,13 +184,13 @@ function Timer() {
   }, []);
   
   return <div>Count: {count}</div>;
-}
+};
 ```
 
 ### イベントリスナーのクリーンアップ
 
 ```tsx
-function Mouse Tracker() {
+const MouseTracker = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   
   useEffect(() => {
@@ -207,7 +207,7 @@ function Mouse Tracker() {
   }, []);
   
   return <div>Position: {position.x}, {position.y}</div>;
-}
+};
 ```
 
 ## 5. 非同期処理
@@ -224,7 +224,7 @@ useEffect(async () => {
 ### 正しい書き方
 
 ```tsx
-function Component() {
+const Component = () => {
   const [data, setData] = useState(null);
   
   useEffect(() => {
@@ -239,13 +239,13 @@ function Component() {
   }, []);
   
   return <div>{data}</div>;
-}
+};
 ```
 
 ### AbortController でキャンセル
 
 ```tsx
-function SearchResults({ query }: { query: string }) {
+const SearchResults = ({ query }: { query: string }) => {
   const [results, setResults] = useState([]);
   
   useEffect(() => {
@@ -269,7 +269,7 @@ function SearchResults({ query }: { query: string }) {
   }, [query]);
   
   return <div>{/* results を表示 */}</div>;
-}
+};
 ```
 
 ## 6. よくある間違い
@@ -277,7 +277,7 @@ function SearchResults({ query }: { query: string }) {
 ### 依存配列の漏れ
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   
   // ❌ count を使っているのに依存配列にない
@@ -289,13 +289,13 @@ function Component() {
   useEffect(() => {
     console.log("Count is:", count);
   }, [count]);
-}
+};
 ```
 
 ### 無限ループ
 
 ```tsx
-function Component() {
+const Component = () => {
   const [data, setData] = useState([]);
   
   // ❌ 無限ループ
@@ -311,13 +311,13 @@ function Component() {
       .then(res => res.json())
       .then(json => setData(json));
   }, []); // 初回のみ
-}
+};
 ```
 
 ### オブジェクト・配列を依存配列に
 
 ```tsx
-function Component() {
+const Component = () => {
   const options = { limit: 10 }; // 毎回新しいオブジェクト
   
   // ❌ options は毎回新しい参照 → 無限ループ
@@ -332,7 +332,7 @@ function Component() {
   
   // ✅ 解決策2：useMemo（後述）
   const options = useMemo(() => ({ limit: 10 }), []);
-}
+};
 ```
 
 ## 7. 複数の useEffect
@@ -340,7 +340,7 @@ function Component() {
 ### 関心事ごとに分ける
 
 ```tsx
-function Component({ userId }: { userId: number }) {
+const Component = ({ userId }: { userId: number }) => {
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   
@@ -366,7 +366,7 @@ function Component({ userId }: { userId: number }) {
   }, [user]);
   
   return <div>{/* ... */}</div>;
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -416,7 +416,7 @@ const doubled = count * 2;
 <summary>解答</summary>
 
 ```tsx
-function Countdown() {
+const Countdown = () => {
   const [count, setCount] = useState(10);
   
   useEffect(() => {
@@ -430,7 +430,7 @@ function Countdown() {
   }, [count]);
   
   return <div>{count}</div>;
-}
+};
 ```
 </details>
 

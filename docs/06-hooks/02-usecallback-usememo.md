@@ -18,12 +18,12 @@ useCallback と useMemo はパフォーマンス最適化のためのフック�
 ```tsx
 import { memo } from 'react';
 
-const Child = memo(function Child({ onClick }: { onClick: () => void }) {
+const Child = memo(({ onClick }: { onClick: () => void }) => {
   console.log("Child rendered");
   return <button onClick={onClick}>Click</button>;
 });
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   // ❌ 毎回新しい関数 → Child が再レンダリング
@@ -37,7 +37,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ### useCallback で解決
@@ -45,12 +45,12 @@ function Parent() {
 ```tsx
 import { memo, useCallback } from 'react';
 
-const Child = memo(function Child({ onClick }: { onClick: () => void }) {
+const Child = memo(({ onClick }: { onClick: () => void }) => {
   console.log("Child rendered");
   return <button onClick={onClick}>Click</button>;
 });
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   // ✅ 同じ関数参照を返す
@@ -64,7 +64,7 @@ function Parent() {
       <button onClick={() => setCount(count + 1)}>Count: {count}</button>
     </div>
   );
-}
+};
 ```
 
 ## 2. useCallback の構文
@@ -83,7 +83,7 @@ const memoizedCallback = useCallback(
 ### 依存配列
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   const [text, setText] = useState("");
   
@@ -99,7 +99,7 @@ function Component() {
       <input value={text} onChange={(e) => setText(e.target.value)} />
     </div>
   );
-}
+};
 ```
 
 ## 3. useCallback の実用例
@@ -112,7 +112,7 @@ type FormData = {
   email: string;
 };
 
-function Form() {
+const Form = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: ""
@@ -139,7 +139,7 @@ function Form() {
       <button type="submit">Submit</button>
     </form>
   );
-}
+};
 ```
 
 ### リストアイテムのコールバック
@@ -150,13 +150,13 @@ type Todo = {
   text: string;
 };
 
-const TodoItem = memo(function TodoItem({ 
+const TodoItem = memo(({ 
   todo, 
   onDelete 
 }: { 
   todo: Todo; 
   onDelete: (id: number) => void;
-}) {
+}) => {
   console.log("TodoItem rendered:", todo.text);
   return (
     <div>
@@ -166,7 +166,7 @@ const TodoItem = memo(function TodoItem({
   );
 });
 
-function TodoList() {
+const TodoList = () => {
   const [todos, setTodos] = useState<Todo[]>([
     { id: 1, text: "Learn React" },
     { id: 2, text: "Learn TypeScript" }
@@ -184,7 +184,7 @@ function TodoList() {
       ))}
     </div>
   );
-}
+};
 ```
 
 ## 4. useMemo の基礎
@@ -192,20 +192,20 @@ function TodoList() {
 ### 問題：毎回同じ計算をする
 
 ```tsx
-function Component({ items }: { items: number[] }) {
+const Component = ({ items }: { items: number[] }) => {
   const [filter, setFilter] = useState("");
   
   // ❌ filter が変わらなくても毎回計算
   const total = items.reduce((sum, item) => sum + item, 0);
   
   return <div>Total: {total}</div>;
-}
+};
 ```
 
 ### useMemo で解決
 
 ```tsx
-function Component({ items }: { items: number[] }) {
+const Component = ({ items }: { items: number[] }) => {
   const [filter, setFilter] = useState("");
   
   // ✅ items が変わったときのみ計算
@@ -220,7 +220,7 @@ function Component({ items }: { items: number[] }) {
       <p>Total: {total}</p>
     </div>
   );
-}
+};
 ```
 
 ## 5. useMemo の構文
@@ -240,7 +240,7 @@ const memoizedValue = useMemo(
 ### 重い計算のメモ化
 
 ```tsx
-function ExpensiveComponent({ data }: { data: number[] }) {
+const ExpensiveComponent = ({ data }: { data: number[] }) => {
   const [query, setQuery] = useState("");
   
   // ✅ 重い計算をメモ化
@@ -263,7 +263,7 @@ function ExpensiveComponent({ data }: { data: number[] }) {
       </ul>
     </div>
   );
-}
+};
 ```
 
 ## 6. useMemo の実用例
@@ -277,7 +277,7 @@ type User = {
   age: number;
 };
 
-function UserList({ users }: { users: User[] }) {
+const UserList = ({ users }: { users: User[] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "age">("name");
   
@@ -315,13 +315,13 @@ function UserList({ users }: { users: User[] }) {
       </ul>
     </div>
   );
-}
+};
 ```
 
 ### オブジェクトの参照を安定化
 
 ```tsx
-function Component() {
+const Component = () => {
   const [count, setCount] = useState(0);
   
   // ❌ 毎回新しいオブジェクト
@@ -338,7 +338,7 @@ function Component() {
   }, [options]); // options が変わらないので初回のみ実行
   
   return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
-}
+};
 ```
 
 ## 7. useCallback vs useMemo
@@ -464,7 +464,7 @@ type Product = {
   price: number;
 };
 
-function ProductList({ products }: { products: Product[] }) {
+const ProductList = ({ products }: { products: Product[] }) => {
   const [query, setQuery] = useState("");
   
   const filteredProducts = useMemo(() => {
@@ -489,7 +489,7 @@ function ProductList({ products }: { products: Product[] }) {
       </ul>
     </div>
   );
-}
+};
 ```
 </details>
 

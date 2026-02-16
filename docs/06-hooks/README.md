@@ -159,7 +159,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-function Counter() {
+const Counter = () => {
   const [state, dispatch] = useReducer(reducer, { count: 0 });
   
   return (
@@ -169,7 +169,7 @@ function Counter() {
       <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
     </>
   );
-}
+};
 ```
 
 **useReducer のメリット:**
@@ -207,7 +207,7 @@ const ThemeContext = createContext<ThemeContextType>('light');
 
 **Provider での値の提供:**
 ```tsx
-function App() {
+const App = () => {
   const [theme, setTheme] = useState<ThemeContextType>('light');
   
   return (
@@ -215,12 +215,12 @@ function App() {
       <Page />
     </ThemeContext.Provider>
   );
-}
+};
 ```
 
 **useContext での値の取得:**
 ```tsx
-function Button() {
+const Button = () => {
   const theme = useContext(ThemeContext);
   
   return (
@@ -228,7 +228,7 @@ function Button() {
       Click me
     </button>
   );
-}
+};
 ```
 
 **Context の適切な使用:**
@@ -309,7 +309,7 @@ const handleClick = useCallback(() => {
 ```tsx
 const MemoizedChild = React.memo(Child);
 
-function Parent() {
+const Parent = () => {
   const [count, setCount] = useState(0);
   
   // ❌ 毎回新しい関数が作られる
@@ -323,7 +323,7 @@ function Parent() {
   }, []);
   
   return <MemoizedChild onClick={handleClickMemo} />;
-}
+};
 ```
 
 ### 6.8 その他の組み込み Hooks

@@ -41,7 +41,7 @@
 ```tsx
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <nav>
@@ -57,7 +57,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 ```
 
 **ナビゲーション:**
@@ -76,7 +76,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 </NavLink>
 
 // プログラマティックナビゲーション
-function Component() {
+const Component = () => {
   const navigate = useNavigate();
   
   const handleClick = () => {
@@ -86,7 +86,7 @@ function Component() {
   };
   
   return <button onClick={handleClick}>Go to About</button>;
-}
+};
 ```
 
 **パラメータとクエリ:**
@@ -94,13 +94,13 @@ function Component() {
 import { useParams, useSearchParams } from 'react-router-dom';
 
 // URLパラメータ: /users/:id
-function UserPage() {
+const UserPage = () => {
   const { id } = useParams<{ id: string }>();
   return <div>User ID: {id}</div>;
-}
+};
 
 // クエリパラメータ: /search?q=react
-function SearchPage() {
+const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('q');
   
@@ -112,14 +112,14 @@ function SearchPage() {
       </button>
     </div>
   );
-}
+};
 ```
 
 **ネストルートとレイアウト:**
 ```tsx
 import { Outlet } from 'react-router-dom';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -132,9 +132,9 @@ function App() {
       </Route>
     </Routes>
   );
-}
+};
 
-function Layout() {
+const Layout = () => {
   return (
     <div>
       <header>Header</header>
@@ -144,12 +144,12 @@ function Layout() {
       <footer>Footer</footer>
     </div>
   );
-}
+};
 ```
 
 **保護されたルート:**
 ```tsx
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   
   if (!user) {
@@ -157,7 +157,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
   
   return <>{children}</>;
-}
+};
 
 // 使用例
 <Route 
@@ -185,10 +185,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-function UserPage() {
+const UserPage = () => {
   const user = useLoaderData() as User;
   return <div>{user.name}</div>;
-}
+};
 ```
 
 ### 9.3 TanStack Query (旧 React Query)
@@ -205,20 +205,20 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
-function App() {
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <YourApp />
     </QueryClientProvider>
   );
-}
+};
 ```
 
 **useQuery - データ取得:**
 ```tsx
 import { useQuery } from '@tanstack/react-query';
 
-function Users() {
+const Users = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
@@ -237,14 +237,14 @@ function Users() {
       ))}
     </ul>
   );
-}
+};
 ```
 
 **useMutation - データ更新:**
 ```tsx
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-function AddUser() {
+const AddUser = () => {
   const queryClient = useQueryClient();
   
   const mutation = useMutation({
@@ -274,7 +274,7 @@ function AddUser() {
       {mutation.isError && <div>Error: {mutation.error.message}</div>}
     </form>
   );
-}
+};
 ```
 
 **キャッシングと再取得:**
@@ -335,7 +335,7 @@ const useCounterStore = create<CounterStore>((set) => ({
   decrement: () => set((state) => ({ count: state.count - 1 })),
 }));
 
-function Counter() {
+const Counter = () => {
   const { count, increment, decrement } = useCounterStore();
   
   return (
@@ -345,7 +345,7 @@ function Counter() {
       <button onClick={decrement}>-</button>
     </div>
   );
-}
+};
 ```
 
 **いつ状態管理ライブラリが必要か:**
@@ -372,7 +372,7 @@ type FormData = {
   age: number;
 };
 
-function MyForm() {
+const MyForm = () => {
   const {
     register,
     handleSubmit,
@@ -415,7 +415,7 @@ function MyForm() {
       <button type="submit">Submit</button>
     </form>
   );
-}
+};
 ```
 
 **バリデーションスキーマ (Zod):**
@@ -431,13 +431,13 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-function MyForm() {
+const MyForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
   
   // ...
-}
+};
 ```
 
 ### 9.6 UI ライブラリ
@@ -446,7 +446,7 @@ function MyForm() {
 ```tsx
 import { Button, TextField, Box } from '@mui/material';
 
-function LoginForm() {
+const LoginForm = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <TextField label="Email" type="email" />
@@ -454,7 +454,7 @@ function LoginForm() {
       <Button variant="contained">Login</Button>
     </Box>
   );
-}
+};
 ```
 
 **shadcn/ui:**
@@ -479,7 +479,7 @@ function LoginForm() {
 
 **基本的な使い方:**
 ```tsx
-function Card() {
+const Card = () => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
       <h2 className="text-2xl font-bold mb-4">Title</h2>
@@ -489,7 +489,7 @@ function Card() {
       </button>
     </div>
   );
-}
+};
 ```
 
 **レスポンシブデザイン:**

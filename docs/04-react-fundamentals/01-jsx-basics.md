@@ -168,13 +168,13 @@ const count = 0;
 ### if文（JSXの外）
 
 ```tsx
-function Greeting({ isLoggedIn }: { isLoggedIn: boolean }) {
+const Greeting = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   if (isLoggedIn) {
     return <h1>Welcome back!</h1>;
   }
   
   return <h1>Please log in.</h1>;
-}
+};
 ```
 
 ## 5. リストのレンダリング
@@ -243,32 +243,32 @@ const element = (
 
 ```tsx
 // ❌ エラー：複数のルート要素
-function Component() {
+const Component = () => {
   return (
     <h1>Title</h1>
     <p>Content</p>
   );
-}
+};
 
 // ✅ div で囲む
-function Component() {
+const Component = () => {
   return (
     <div>
       <h1>Title</h1>
       <p>Content</p>
     </div>
   );
-}
+};
 
 // ✅ Fragment を使う（余計なDOMを追加しない）
-function Component() {
+const Component = () => {
   return (
     <>
       <h1>Title</h1>
       <p>Content</p>
     </>
   );
-}
+};
 ```
 
 ### 2. キャメルケースの属性
@@ -322,14 +322,14 @@ const content4: React.ReactNode = null; // null/undefined
 ### コンポーネントの返り値
 
 ```tsx
-function Component(): JSX.Element {
+const Component = (): JSX.Element => {
   return <div>Hello</div>;
-}
+};
 
 // または型推論に任せる
-function Component() {
+const Component = () => {
   return <div>Hello</div>;
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -351,11 +351,11 @@ function Component() {
 {isLoggedIn ? isAdmin ? <AdminPanel /> : <UserPanel /> : <LoginForm />}
 
 // ✅ コンポーネント内で分岐
-function Dashboard({ isLoggedIn, isAdmin }) {
+const Dashboard = ({ isLoggedIn, isAdmin }) => {
   if (!isLoggedIn) return <LoginForm />;
   if (isAdmin) return <AdminPanel />;
   return <UserPanel />;
-}
+};
 ```
 
 ### 3. key は安定したIDを使う

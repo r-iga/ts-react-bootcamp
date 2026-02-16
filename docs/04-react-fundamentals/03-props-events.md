@@ -22,19 +22,19 @@ type UserProps = {
   age: number;
 };
 
-function User({ name, age }: UserProps) {
+const User = ({ name, age }: UserProps) => {
   return <div>{name} ({age})</div>;
-}
+};
 
 // 親コンポーネント
-function App() {
+const App = () => {
   return (
     <div>
       <User name="Alice" age={25} />
       <User name="Bob" age={30} />
     </div>
   );
-}
+};
 ```
 
 ### オブジェクトを渡す
@@ -50,14 +50,14 @@ type UserCardProps = {
   user: User;
 };
 
-function UserCard({ user }: UserCardProps) {
+const UserCard = ({ user }: UserCardProps) => {
   return (
     <div>
       <h3>{user.name}</h3>
       <p>{user.email}</p>
     </div>
   );
-}
+};
 
 // 使用
 const user = { id: 1, name: "Alice", email: "alice@example.com" };
@@ -69,25 +69,25 @@ const user = { id: 1, name: "Alice", email: "alice@example.com" };
 ### onClick - クリックイベント
 
 ```tsx
-function Button() {
+const Button = () => {
   const handleClick = () => {
     console.log("Button clicked!");
   };
   
   return <button onClick={handleClick}>Click me</button>;
-}
+};
 ```
 
 ### インライン関数
 
 ```tsx
-function Button() {
+const Button = () => {
   return (
     <button onClick={() => console.log("Clicked!")}>
       Click me
     </button>
   );
-}
+};
 ```
 
 ⚠️ **パフォーマンスの注意**
@@ -106,14 +106,14 @@ function Button() {
 ### イベントオブジェクト
 
 ```tsx
-function Button() {
+const Button = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     console.log("Clicked at:", event.clientX, event.clientY);
     console.log("Target:", event.currentTarget);
   };
   
   return <button onClick={handleClick}>Click me</button>;
-}
+};
 ```
 
 ## 3. フォームのイベント
@@ -121,19 +121,19 @@ function Button() {
 ### onChange - 入力変更
 
 ```tsx
-function Input() {
+const Input = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Value:", event.target.value);
   };
   
   return <input type="text" onChange={handleChange} />;
-}
+};
 ```
 
 ### onSubmit - フォーム送信
 
 ```tsx
-function Form() {
+const Form = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // ページリロードを防ぐ
     console.log("Form submitted");
@@ -145,13 +145,13 @@ function Form() {
       <button type="submit">Submit</button>
     </form>
   );
-}
+};
 ```
 
 ### 完全なフォーム例
 
 ```tsx
-function LoginForm() {
+const LoginForm = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
@@ -169,7 +169,7 @@ function LoginForm() {
       <button type="submit">Login</button>
     </form>
   );
-}
+};
 ```
 
 ## 4. コールバック Props
@@ -182,18 +182,18 @@ type ButtonProps = {
   onPress: () => void;
 };
 
-function Button({ onPress }: ButtonProps) {
+const Button = ({ onPress }: ButtonProps) => {
   return <button onClick={onPress}>Click me</button>;
-}
+};
 
 // 親コンポーネント
-function App() {
+const App = () => {
   const handlePress = () => {
     console.log("Button was pressed!");
   };
   
   return <Button onPress={handlePress} />;
-}
+};
 ```
 
 ### データを渡すコールバック
@@ -204,7 +204,7 @@ type SearchBoxProps = {
   onSearch: (query: string) => void;
 };
 
-function SearchBox({ onSearch }: SearchBoxProps) {
+const SearchBox = ({ onSearch }: SearchBoxProps) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
@@ -218,16 +218,16 @@ function SearchBox({ onSearch }: SearchBoxProps) {
       <button type="submit">Search</button>
     </form>
   );
-}
+};
 
 // 親コンポーネント
-function App() {
+const App = () => {
   const handleSearch = (query: string) => {
     console.log("Searching for:", query);
   };
   
   return <SearchBox onSearch={handleSearch} />;
-}
+};
 ```
 
 ## 5. よくあるイベント
@@ -235,7 +235,7 @@ function App() {
 ### マウスイベント
 
 ```tsx
-function Box() {
+const Box = () => {
   return (
     <div
       onClick={() => console.log("Clicked")}
@@ -246,13 +246,13 @@ function Box() {
       Hover or click me
     </div>
   );
-}
+};
 ```
 
 ### キーボードイベント
 
 ```tsx
-function Input() {
+const Input = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       console.log("Enter pressed");
@@ -263,13 +263,13 @@ function Input() {
   };
   
   return <input type="text" onKeyDown={handleKeyDown} />;
-}
+};
 ```
 
 ### フォーカスイベント
 
 ```tsx
-function Input() {
+const Input = () => {
   return (
     <input
       type="text"
@@ -277,7 +277,7 @@ function Input() {
       onBlur={() => console.log("Blurred")}
     />
   );
-}
+};
 ```
 
 ## 6. イベントの伝播
@@ -285,7 +285,7 @@ function Input() {
 ### イベントバブリング
 
 ```tsx
-function Parent() {
+const Parent = () => {
   return (
     <div onClick={() => console.log("Parent clicked")}>
       <button onClick={() => console.log("Button clicked")}>
@@ -293,7 +293,7 @@ function Parent() {
       </button>
     </div>
   );
-}
+};
 
 // ボタンをクリックすると：
 // "Button clicked"
@@ -303,7 +303,7 @@ function Parent() {
 ### 伝播を止める
 
 ```tsx
-function Parent() {
+const Parent = () => {
   return (
     <div onClick={() => console.log("Parent clicked")}>
       <button onClick={(e) => {
@@ -314,7 +314,7 @@ function Parent() {
       </button>
     </div>
   );
-}
+};
 
 // ボタンをクリックすると：
 // "Button clicked" のみ
@@ -342,7 +342,7 @@ type Props = {
 ### 内部のハンドラー
 
 ```tsx
-function Component({ onClick }: { onClick: () => void }) {
+const Component = ({ onClick }: { onClick: () => void }) => {
   // ✅ handle で始める
   const handleClick = () => {
     console.log("Processing...");
@@ -350,7 +350,7 @@ function Component({ onClick }: { onClick: () => void }) {
   };
   
   return <button onClick={handleClick}>Click</button>;
-}
+};
 ```
 
 ## 8. 実践例：TodoItem
@@ -368,7 +368,7 @@ type TodoItemProps = {
   onDelete: (id: number) => void;
 };
 
-function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (
     <div>
       <input
@@ -386,10 +386,10 @@ function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       <button onClick={() => onDelete(todo.id)}>Delete</button>
     </div>
   );
-}
+};
 
 // 使用
-function TodoList() {
+const TodoList = () => {
   const handleToggle = (id: number) => {
     console.log("Toggle todo:", id);
   };
@@ -414,7 +414,7 @@ function TodoList() {
       ))}
     </div>
   );
-}
+};
 ```
 
 ## ✅ ベストプラクティス
@@ -472,7 +472,7 @@ type CounterProps = {
 <summary>解答</summary>
 
 ```tsx
-function Counter({ value, onIncrement, onDecrement }: CounterProps) {
+const Counter = ({ value, onIncrement, onDecrement }: CounterProps) => {
   return (
     <div>
       <button onClick={onDecrement}>-</button>
@@ -480,7 +480,7 @@ function Counter({ value, onIncrement, onDecrement }: CounterProps) {
       <button onClick={onIncrement}>+</button>
     </div>
   );
-}
+};
 ```
 </details>
 

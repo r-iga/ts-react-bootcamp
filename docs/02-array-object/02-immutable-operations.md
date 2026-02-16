@@ -539,4 +539,4 @@ const updatedUser = {
 
 ##🔗 次のステップ
 
-次は [Chapter 3: DOM操作](../03-dom-manipulation/) に進みま しょう。
+次は [Chapter 3: DOM操作](../03-dom-manipulation/) に進みましょう。

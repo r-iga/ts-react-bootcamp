@@ -32,7 +32,7 @@
 ```tsx
 import { useState } from 'react';
 
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(0);
   
   return (
@@ -41,7 +41,7 @@ function Counter() {
       <button onClick={() => setCount(count + 1)}>+1</button>
     </div>
   );
-}
+};
 ```
 
 **useState の仕組み:**
@@ -173,7 +173,7 @@ setCount(prevCount => {
 
 **制御されたコンポーネント:**
 ```tsx
-function Form() {
+const Form = () => {
   const [text, setText] = useState('');
   
   return (
@@ -182,7 +182,7 @@ function Form() {
       onChange={(e) => setText(e.target.value)}
     />
   );
-}
+};
 ```
 
 **複数の入力フィールド:**
@@ -222,7 +222,7 @@ const handleSubmit = (e: React.FormEvent) => {
 
 **リフトアップの例:**
 ```tsx
-function Parent() {
+const Parent = () => {
   const [value, setValue] = useState('');
   
   return (
@@ -231,17 +231,17 @@ function Parent() {
       <ChildB value={value} />
     </>
   );
-}
+};
 
-function ChildA({ value, onChange }: Props) {
+const ChildA = ({ value, onChange }: Props) => {
   return (
     <input value={value} onChange={(e) => onChange(e.target.value)} />
   );
-}
+};
 
-function ChildB({ value }: Props) {
+const ChildB = ({ value }: Props) => {
   return <p>Value: {value}</p>;
-}
+};
 ```
 
 **いつリフトアップするか:**

@@ -18,7 +18,7 @@ useState は React で最も重要なフックです。
 ```tsx
 import { useState } from 'react';
 
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(0);
   
   return (
@@ -27,7 +27,7 @@ function Counter() {
       <button onClick={() => setCount(count + 1)}>+1</button>
     </div>
   );
-}
+};
 ```
 
 ### 構文の説明
@@ -43,7 +43,7 @@ const [state, setState] = useState(initialValue);
 ### 文字列
 
 ```tsx
-function NameInput() {
+const NameInput = () => {
   const [name, setName] = useState("");
   
   return (
@@ -53,13 +53,13 @@ function NameInput() {
       onChange={(e) => setName(e.target.value)}
     />
   );
-}
+};
 ```
 
 ### 真偽値
 
 ```tsx
-function Toggle() {
+const Toggle = () => {
   const [isOn, setIsOn] = useState(false);
   
   return (
@@ -67,7 +67,7 @@ function Toggle() {
       {isOn ? "ON" : "OFF"}
     </button>
   );
-}
+};
 ```
 
 ### オブジェクト
@@ -78,7 +78,7 @@ type User = {
   age: number;
 };
 
-function UserForm() {
+const UserForm = () => {
   const [user, setUser] = useState<User>({
     name: "",
     age: 0
@@ -97,13 +97,13 @@ function UserForm() {
       />
     </div>
   );
-}
+};
 ```
 
 ### 配列
 
 ```tsx
-function TodoList() {
+const TodoList = () => {
   const [todos, setTodos] = useState<string[]>([]);
   
   const addTodo = (text: string) => {
@@ -117,7 +117,7 @@ function TodoList() {
       ))}
     </ul>
   );
-}
+};
 ```
 
 ## 3. State の更新
@@ -145,7 +145,7 @@ setCount(prev => prev * 2);
 ### 更新関数を使うべきとき
 
 ```tsx
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(0);
   
   const increment = () => {
@@ -165,7 +165,7 @@ function Counter() {
   };
   
   return <button onClick={incrementCorrect}>+3</button>;
-}
+};
 ```
 
 ## 4. オブジェクトの更新（不変性）
@@ -179,7 +179,7 @@ type User = {
   email: string;
 };
 
-function UserProfile() {
+const UserProfile = () => {
   const [user, setUser] = useState<User>({
     name: "Alice",
     age: 25,
@@ -201,7 +201,7 @@ function UserProfile() {
       <input type="number" value={user.age} onChange={(e) => updateAge(Number(e.target.value))} />
     </div>
   );
-}
+};
 ```
 
 ### ネストしたオブジェクトの更新
@@ -215,7 +215,7 @@ type User = {
   };
 };
 
-function UserProfile() {
+const UserProfile = () => {
   const [user, setUser] = useState<User>({
     name: "Alice",
     address: {
@@ -236,7 +236,7 @@ function UserProfile() {
   };
   
   return <input value={user.address.city} onChange={(e) => updateCity(e.target.value)} />;
-}
+};
 ```
 
 ## 5. 配列の更新（不変性）
@@ -292,7 +292,7 @@ type Todo = {
   completed: boolean;
 };
 
-function TodoApp() {
+const TodoApp = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   
   const addTodo = (text: string) => {
@@ -329,7 +329,7 @@ function TodoApp() {
       ))}
     </div>
   );
-}
+};
 ```
 
 ## 7. TypeScriptでの型指定
@@ -415,7 +415,7 @@ const [count, setCount] = useState(props.initialCount);
 <summary>解答</summary>
 
 ```tsx
-function Counter() {
+const Counter = () => {
   const [count, setCount] = useState(0);
   
   return (
@@ -426,7 +426,7 @@ function Counter() {
       <button onClick={() => setCount(0)}>Reset</button>
     </div>
   );
-}
+};
 ```
 </details>
 
@@ -443,7 +443,7 @@ type FormData = {
   email: string;
 };
 
-function Form() {
+const Form = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: ""
@@ -463,7 +463,7 @@ function Form() {
       />
     </div>
   );
-}
+};
 ```
 </details>
 

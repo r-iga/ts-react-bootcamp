@@ -308,7 +308,7 @@ printCoordinates([10, 20]); // "X: 10, Y: 20"
 
 ```typescript
 // ❌ props を毎回参照
-function UserCard(props) {
+const UserCard = (props) => {
   return (
     <div>
       <h2>{props.name}</h2>
@@ -316,10 +316,10 @@ function UserCard(props) {
       <p>{props.city}</p>
     </div>
   );
-}
+};
 
 // ✅ 分割代入で簡潔に
-function UserCard({ name, age, city }) {
+const UserCard = ({ name, age, city }) => {
   return (
     <div>
       <h2>{name}</h2>
@@ -327,7 +327,7 @@ function UserCard({ name, age, city }) {
       <p>{city}</p>
     </div>
   );
-}
+};
 ```
 
 ### useState の分割代入
@@ -335,7 +335,7 @@ function UserCard({ name, age, city }) {
 ```typescript
 import { useState } from 'react';
 
-function Counter() {
+const Counter = () => {
   // useState は配列を返す
   const [count, setCount] = useState(0);
   
@@ -344,7 +344,7 @@ function Counter() {
       Count: {count}
     </button>
   );
-}
+};
 ```
 
 ### useEffect などのフックも同様
@@ -352,7 +352,7 @@ function Counter() {
 ```typescript
 import { useQuery } from '@tanstack/react-query';
 
-function Users() {
+const Users = () => {
   // オブジェクトの分割代入
   const { data, isLoading, error } = useQuery({
     queryKey: ['users'],
@@ -363,7 +363,7 @@ function Users() {
   if (error) return <div>Error</div>;
   
   return <div>{/* data を使う */}</div>;
-}
+};
 ```
 
 ## 5. 配列とオブジェクトの組み合わせ

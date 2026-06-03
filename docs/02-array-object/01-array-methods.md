@@ -497,4 +497,4 @@ console.log(average); // 87.6
 
 ## 🔗 次のステップ
 
-次は [オブジェクト操作](./02-object-operations.md) について学びます。
+次は [イミュータブルな操作](./02-immutable-operations.md) について学びます。
